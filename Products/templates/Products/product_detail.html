@@ -51,7 +51,7 @@
                             <div class="col-md-2 text-center">
                                 <p class="btn btn-warning">
                                 الإفتتاح:
-                                {% if product %}
+                                {% if product.quantity %}
                                 {{ product.quantity|floatformat:0 }}
                                 {% else %}
                                 0.0

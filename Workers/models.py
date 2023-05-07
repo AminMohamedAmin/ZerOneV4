@@ -37,7 +37,7 @@ class WorkerAttendance(models.Model):
     worker = models.ForeignKey(Worker, on_delete=models.CASCADE,verbose_name="العامل")    
     hour_count = models.IntegerField(choices=HOUR_COUNT, null=True, blank=True, verbose_name="عدد الساعات")
     attend = models.BooleanField(default=0, verbose_name="حضر")
-    admin = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="المسئول")
+    admin = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="المسئول")
     
     def __str__(self):
         return self.worker.name
@@ -46,7 +46,7 @@ class WorkerPayment(models.Model):
     date = models.DateField(verbose_name="تاريخ السحب", default=django.utils.timezone.now())
     worker = models.ForeignKey(Worker, on_delete=models.CASCADE, verbose_name=" العامل") 
     price = models.FloatField(verbose_name="المبلغ") 
-    admin = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="المسئول")
+    admin = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="المسئول")
     
     def __str__(self):
         return self.worker.name
@@ -58,8 +58,8 @@ class WorkerProduction(models.Model):
     quantity = models.FloatField(default=0, verbose_name="الكمية بالقطعة")
     price = models.FloatField(default=0, verbose_name="فئة السعر")
     total = models.FloatField(default=0, verbose_name="الإجمالي")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="المنتج", null=True, blank=True)
-    admin = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="المسئول")
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, verbose_name="المنتج", null=True, blank=True)
+    admin = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="المسئول")
     
     def __str__(self):
         return self.worker.name

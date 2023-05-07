@@ -13,7 +13,7 @@ class Invoice(models.Model):
     date = models.DateField(default=now, verbose_name='التاريخ')
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='منشئ الفاتورة')
     invoice_type = models.IntegerField(choices=invoice_choices, default=0, verbose_name='نوع الفاتورة')
-    seller = models.ForeignKey(ProductSellers, on_delete=models.SET_NULL, null=True, verbose_name='التاجر')
+    seller = models.ForeignKey(ProductSellers, on_delete=models.CASCADE, null=True, verbose_name='التاجر')
     customer = models.CharField(max_length=255, verbose_name='العميل')
     total = models.FloatField(default=0.0, verbose_name='قيمة الفاتورة')
     discount = models.FloatField(default=0.0, verbose_name='الخصم')

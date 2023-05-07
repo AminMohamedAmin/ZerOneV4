@@ -611,7 +611,12 @@ class ProductDetails(LoginRequiredMixin, ListView):
         else:
             context['r_invoices_sum'] = 0
 
-        context['total'] = context['factory_in_sum'] + product.quantity - (context['invoices_sum'] - context['r_invoices_sum'])
+        if product.quantity:
+            product_quantity = product.quantity
+        else:
+            product_quantity = 0
+
+        context['total'] = context['factory_in_sum'] + product_quantity - (context['invoices_sum'] - context['r_invoices_sum'])
 
         context['product'] = product
         return context
