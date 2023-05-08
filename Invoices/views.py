@@ -263,6 +263,13 @@ class InvoiceDelete(LoginRequiredMixin, UpdateView):
         return redirect(self.get_success_url())
 
 
+def AllInvoiceDelete(request):
+    invs3 = Invoice.objects.filter(invoice_type=3)
+    invs3.delete()
+    messages.success(request, "تم حذف جميع فواتير القطاعي بنجاح", extra_tags="success")
+    return redirect('Invoices:InvoiceList', type=3)
+
+
 class InvoiceRestore(LoginRequiredMixin, UpdateView):
     login_url = '/auth/login/'
     model = Invoice

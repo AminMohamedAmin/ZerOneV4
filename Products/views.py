@@ -431,6 +431,7 @@ class SellerSuperDelete(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'حذف التاجر: ' + str(self.object)
         context['message'] = 'super_delete'
+        context['seller_del'] = True
         context['action_url'] = reverse_lazy('Products:SellerSuperDelete', kwargs={'pk': self.object.id})
         return context
 

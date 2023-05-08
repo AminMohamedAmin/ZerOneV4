@@ -13,6 +13,7 @@ urlpatterns = [
     path('InvoiceRestore/<int:pk>/', InvoiceRestore.as_view(), name="InvoiceRestore"),
     path('InvoiceSuperDelete/<int:pk>/', InvoiceSuperDelete.as_view(), name="InvoiceSuperDelete"),
     path('InvoiceDelete/<int:pk>/', InvoiceDelete.as_view(), name="InvoiceDelete"),
+    path('AllInvoiceDelete/', AllInvoiceDelete, name="AllInvoiceDelete"),
     path('InvoiceDetail/<int:pk>/', InvoiceDetail, name="InvoiceDetail"),
     path('AddProductInvoice/<int:pk>/', AddProductInvoice, name='AddProductInvoice'),
     path('get_item_price/', get_item_price, name='get_item_price'),

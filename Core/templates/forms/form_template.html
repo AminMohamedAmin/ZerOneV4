@@ -112,6 +112,10 @@
                                     
                                 بشكل نهائي
                                 ؟
+                                {% if seller_del %}
+                                <br><br>
+                                سيتم حذف فواتير المبيعات ومرتجع المبيعات الخاصة بالتاجر
+                                {% endif %}
                             </h5>
                         {% elif message == 'operation' %} 
                             {% csrf_token %}

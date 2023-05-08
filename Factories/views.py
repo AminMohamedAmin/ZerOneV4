@@ -147,7 +147,7 @@ class FactoryRestore(LoginRequiredMixin ,UpdateView):
         return context
 
     def form_valid(self, form):
-        messages.success(self.request, " تم المصنع " + str(self.object) + ' الي القائمة بنجاح ' , extra_tags="success")
+        messages.success(self.request, " تم ارجاع المصنع " + str(self.object) + ' الي القائمة بنجاح ' , extra_tags="success")
         myform = Factory.objects.get(id=self.kwargs['pk'])
         myform.deleted = 0
         myform.save()
@@ -303,7 +303,7 @@ class FactoryOutside(LoginRequiredMixin, DetailView):
         queryset = FactoryOutSide.objects.filter(factory=self.object)
         context = super().get_context_data(**kwargs)
         context['outSide'] = queryset.order_by('-date')
-        context['title'] = 'الخارج من المصنع: ' + str(self.object)
+        context['title'] = 'الخارج الي المصنع: ' + str(self.object)
         sum_weight = queryset.aggregate(weight=Sum('weight')).get('weight')
         if sum_weight:
             context['sum_weight'] = "{:.1f}".format(sum_weight)
@@ -425,7 +425,7 @@ class FactoryInside(LoginRequiredMixin, DetailView):
         outSide = FactoryOutSide.objects.filter(factory=self.object)
         context = super().get_context_data(**kwargs)
         context['inSide'] = queryset.order_by('-date')
-        context['title'] = 'الداخل لمصنع: ' + str(self.object)
+        context['title'] = 'الداخل من المصنع: ' + str(self.object)
         form = FactoryInSideForm(self.request.POST or None)
         form.fields['hour_price'].initial = self.object.hour_price
         form.fields['product'].queryset = Product.objects.filter(deleted=0)
