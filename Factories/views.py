@@ -489,7 +489,6 @@ def FactoryInSideCreate(request):
     if request.is_ajax():
         factory_id = request.POST.get('id')
         factory = Factory.objects.get(id=factory_id) 
-        print(factory)
         date = request.POST.get('date')
         weight = request.POST.get('weight')
         color = request.POST.get('color')
@@ -503,7 +502,7 @@ def FactoryInSideCreate(request):
         total_account = request.POST.get('total_account')
         
         if factory_id and date and weight and product and product_weight and product_count and product_time and hour_count and hour_price and total_account:
-    
+
             obj = FactoryInSide()
             obj.factory = factory
             obj.date = date
@@ -527,18 +526,18 @@ def FactoryInSideCreate(request):
                 response = {
                 'msg' : 1
                 }
-            else:
-                response = {
-                    'msg' : 0
-                }
 
-            prod = obj.product
-            if prod.quantity:
-                prod.quantity += int(obj.product_count)
-            else:
-                prod.quantity = int(obj.product_count)
-            prod.save(update_fields=['quantity'])
+            # prod = obj.product
+            # if prod.quantity:
+            #     prod.quantity += int(obj.product_count)
+            # else:
+            #     prod.quantity = int(obj.product_count)
+            # prod.save(update_fields=['quantity'])
 
+        else:
+            response = {
+                'msg': 0
+            }
         return JsonResponse(response)
         
     

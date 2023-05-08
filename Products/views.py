@@ -597,6 +597,11 @@ class ProductDetails(LoginRequiredMixin, ListView):
         context['r_invoices'] = InvoiceItem.objects.filter(item=product, invoice__invoice_type=2, invoice__saved=True).order_by('-date', '-id')
         context['r_invoices_sum'] = InvoiceItem.objects.filter(item=product, invoice__invoice_type=2, invoice__saved=True).order_by('-date', '-id').aggregate(sum=Sum(F('quantity') * F('unit'))).get('sum')
 
+        context['supplier'] = SupplierQuantity.objects.filter(product=product, supplier__type=1).order_by('-date', '-id')
+        context['supplier_sum'] = SupplierQuantity.objects.filter(product=product, supplier__type=1).order_by('-date', '-id').aggregate(sum=Sum('product_count')).get('sum')
+        context['importer'] = SupplierQuantity.objects.filter(product=product, supplier__type=2).order_by('-date', '-id')
+        context['importer_sum'] = SupplierQuantity.objects.filter(product=product, supplier__type=2).order_by('-date', '-id').aggregate(sum=Sum('product_count')).get('sum')
+
         if context['factory_in_sum']:
             context['factory_in_sum'] = context['factory_in_sum']
         else:
@@ -612,12 +617,22 @@ class ProductDetails(LoginRequiredMixin, ListView):
         else:
             context['r_invoices_sum'] = 0
 
+        if context['supplier_sum']:
+            context['supplier_sum'] = context['supplier_sum']
+        else:
+            context['supplier_sum'] = 0
+
+        if context['importer_sum']:
+            context['importer_sum'] = context['importer_sum']
+        else:
+            context['importer_sum'] = 0
+
         if product.quantity:
             product_quantity = product.quantity
         else:
             product_quantity = 0
 
-        context['total'] = context['factory_in_sum'] + product_quantity - (context['invoices_sum'] - context['r_invoices_sum'])
+        context['total'] = context['factory_in_sum'] + product_quantity - (context['invoices_sum'] - context['r_invoices_sum']) - (context['importer_sum'] - context['supplier_sum'])
 
         context['product'] = product
         return context
