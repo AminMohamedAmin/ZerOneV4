@@ -76,7 +76,10 @@
                         <div class="card">
                         <div class="card-body">
 
-                                <div  class="alert alert-primary text-center">
+                                <h3>بيانات مصنع: {{object.name}}</h3>
+
+                                <div  class="alert alert-primary">
+
                                     <ul >
                                         <li style="display: inline; margin-left: 50px">
                                             <span class="  font-size-14" >
@@ -141,21 +144,25 @@
 
                                         </li>
 
-                                        <li style="display: inline; margin-left: 50px">
 
-                                 <a href="{% url 'Factories:FactoryUpdate' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Message">
-                                     <span class="badge  badge-info"><i class='bx bx-edit' ></i>تعديل</span>
-                                </a>
+                                        <li style="display: inline;  float: left">
+
+                                            <a href="{% url 'Factories:FactoryUpdate' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Message">
+                                                <span class="badge  badge-info"><i class='bx bx-edit' ></i>تعديل</span>
+                                            </a>
 
 
-                                <a href="{% url 'Factories:FactoryDelete' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Profile">
-                                    <span class="badge  badge-danger"><i class='bx bxs-trash'  ></i>حذف</span>
-                                </a>
+                                            <a href="{% url 'Factories:FactoryDelete' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Profile">
+                                                <span class="badge  badge-danger"><i class='bx bxs-trash'  ></i>حذف</span>
+                                            </a>
 
 
                                         </li>
-
                                     </ul>
+                                    
+
+                                    
+                                   
                                 </div>
 
 
