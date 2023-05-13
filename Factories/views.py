@@ -95,6 +95,7 @@ class FactoryDetails(LoginRequiredMixin, DetailView):
         sum_weight_after_inside = queryset_inside.aggregate(after=Sum('total_account')).get('after')
         context['sum_weight_after_inside'] = sum_weight_after_inside
 
+        context['form'] = FactoryPaymentReportForm()
         return context
 
 
