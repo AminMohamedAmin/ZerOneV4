@@ -6,7 +6,7 @@
 {% endblock title %}
 
 {% block main %}
-
+    {% load  crispy_forms_tags %}
     <div class="main-content">
 
       <div class="page-content">
@@ -76,9 +76,7 @@
                         <div class="card">
                         <div class="card-body">
 
-                                <h3>بيانات مصنع: {{object.name}}</h3>
-
-                                <div  class="alert alert-primary">
+                                <div  class="alert alert-primary text-center">
                                     <ul >
                                         <li style="display: inline; margin-left: 50px">
                                             <span class="  font-size-14" >
@@ -111,6 +109,8 @@
                                             </span>
                                             {{object.start_date| date:'Y-m-d'}}
                                         </li>
+                                    </ul>
+                                    <ul>
 
                                         <li style="display: inline; margin-left: 50px">
                                             <span class="  font-size-14" >
@@ -141,7 +141,7 @@
 
                                         </li>
 
-                                        <li style="display: inline;  float: left">
+                                        <li style="display: inline; margin-left: 50px">
 
                                  <a href="{% url 'Factories:FactoryUpdate' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Message">
                                      <span class="badge  badge-info"><i class='bx bx-edit' ></i>تعديل</span>
@@ -162,7 +162,7 @@
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link " data-toggle="tab" href="#FactoryPayment" role="tab" aria-selected="true">
+                                        <a class="nav-link active" data-toggle="tab" href="#FactoryPayment" role="tab" aria-selected="true">
                                             <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
                                             <span class="d-none d-sm-block"> <i class="fas fa-hand-holding-usd"></i>المسحوبات </span>
                                         </a>
@@ -182,17 +182,17 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link"  href="{% url 'Factories:PrintAll' object.id %}" target="_blank"  aria-selected="true">
-                                            <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
-                                            <span class="d-none d-sm-block"><i class="fas fa-print"></i> كشف حساب</span>
+                                        <a class="nav-link" data-toggle="tab" href="#reports_factory" role="tab" aria-selected="true">
+                                            <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                                            <span class="d-none d-sm-block"><i class="fas fa-print"></i> تقارير</span>
                                         </a>
                                     </li>
                                 </ul>
 
                                 <!-- Tab panes -->
-                                <div class="tab-content p-3 text-muted">
+                                <div class="tab-content text-muted">
                                     <!--المسحوبات-->
-                                    <div class="tab-pane " id="FactoryPayment" role="tabpanel">
+                                    <div class="tab-pane active" id="FactoryPayment" role="tabpanel">
                                         {% include 'Factory/factory_payment.html' %}
                                     </div>
                                     <!--الخارج-->
@@ -203,9 +203,55 @@
                                     <div class="tab-pane" id="Inside_factory" role="tabpanel">
                                         {% include 'Factory/factory_inside.html' %}
                                     </div>
-                                    <!--كشف حساب-->
-                                    <div class="tab-pane" id="settings1" role="tabpanel">
-
+                                    <!--تقارير-->
+                                    <div class="tab-pane" id="reports_factory" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card" >
+                                                    <div class="card-body">
+                                                        <form method="get" action="#" id="my_form">
+                                                        <input name="type" type="hidden" value="{{ request.GET.type }}">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                {{form.from_date|as_crispy_field}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                {{form.to_date|as_crispy_field}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button type="submit" name="submit" value="1" class="btn btn-block btn-success"
+                                                                    onclick="document.getElementById('my_form').action = '{% url 'Factories:PrintPayment' object.id  %}'; document.getElementById('my_form').target = '_blank' "
+                                                                    >
+                                                                    <i class="fas fa-print"></i>
+                                                                      تقرير مسحوبات
+                                                                  </button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button type="submit" name="submit"  value="1" class="btn btn-block btn-success"
+                                                                    onclick="document.getElementById('my_form').action = '{% url 'Factories:PrintOutside' object.id  %}'; document.getElementById('my_form').target = '_blank' "
+                                                                    >
+                                                                    <i class="fas fa-print"></i>
+                                                                      تقرير خارج
+                                                                  </button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button type="submit" name="submit"  value="1" class="btn btn-block btn-success"
+                                                                    onclick="document.getElementById('my_form').action = '{% url 'Factories:PrintInside' object.id  %}'; document.getElementById('my_form').target = '_blank' "
+                                                                    >
+                                                                    <i class="fas fa-print"></i>
+                                                                      تقرير داخل
+                                                                  </button>
+                                                            </div>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
