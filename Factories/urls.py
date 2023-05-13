@@ -6,6 +6,7 @@ urlpatterns = [
     path('list/', FactoryList.as_view(), name="FactoryList"),
     path('trach/', FactoryTrachList.as_view(), name="FactoryTrachList"),
     path('create/', FactoryCreate.as_view(), name="FactoryCreate"),
+    path('details/<int:pk>', FactoryDetails.as_view(), name="FactoryDetails"),
     path('update/<int:pk>', FactoryUpdate.as_view(), name="FactoryUpdate"),
     path('delete/<int:pk>', FactoryDelete.as_view(), name="FactoryDelete"),
     path('restore/<int:pk>', FactoryRestore.as_view(), name="FactoryRestore"),

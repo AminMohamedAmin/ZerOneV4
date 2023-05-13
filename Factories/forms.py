@@ -79,10 +79,10 @@ class FactoryInSideForm(forms.ModelForm):
                   'total_account', 'wool_type']
         model = FactoryInSide
         widgets = {
-            'date' : forms.TextInput(attrs={'type':'date', 'class':'form-control',  'placeholder':'تاريخ الاستلام...', 'id':'date'}),
-            'weight' : forms.NumberInput(attrs={ 'class':'form-control', 'min':'1', 'placeholder':'الوزن المستلم...', 'id':'weight'}),
-            'color' : forms.TextInput(attrs={ 'class':'form-control', 'placeholder':' اللون...', 'id':'color'}),
-            'wool_type' : forms.Select(attrs={'class':'form-control',  'placeholder':'نوع الخامة...', 'id':'wool_type'}),
+            'date' : forms.TextInput(attrs={'type':'date', 'class':'form-control',  'placeholder':'تاريخ الاستلام...', 'id':'date_inside'}),
+            'weight' : forms.NumberInput(attrs={ 'class':'form-control', 'min':'1', 'placeholder':'الوزن المستلم...', 'id':'weight_inside'}),
+            'color' : forms.TextInput(attrs={ 'class':'form-control', 'placeholder':' اللون...', 'id':'color_inside'}),
+            'wool_type' : forms.Select(attrs={'class':'form-control',  'placeholder':'نوع الخامة...', 'id':'wool_type_inside'}),
             'product' : forms.Select(attrs={ 'class':'form-control', 'placeholder':' المنتج...', 'id':'product'}),
             'product_weight' : forms.NumberInput(attrs={ 'class':'form-control', 'min':'1', 'placeholder':' وزن القطعة...', 'id':'product_weight'}),
             'product_time' : forms.NumberInput(attrs={ 'class':'form-control', 'min':'1', 'placeholder':' وقت القطعة...', 'id':'product_time'}),

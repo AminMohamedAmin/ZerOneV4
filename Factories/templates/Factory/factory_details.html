@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title> مصنع: {{object.name}} </title>
+
+{% endblock title %}
+
+{% block main %}
+
+    <div class="main-content">
+
+      <div class="page-content">
+          <div class="container-fuild">
+
+                <div class="row">
+                    <div class="col-12"> {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show text-center" role="alert">
+                            <i class="mdi mdi-check-all mr-2"></i>
+                            {{ message|safe }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        {% endfor %}
+
+
+                      {% endif %}
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-flex align-items-center justify-content-between">
+
+
+                                <h4 class="mb-0"> مصنع: {{object.name}}
+                                     <a class="badge badge-success" style="font-size:small;" href="{% url 'Factories:FactoryCreate' %}" data-toggle="modal" data-target="#action_modal">
+                                            <i class="fas fa-plus-square fx-2"></i>
+                                    </a>
+
+                                    <a class="badge badge-info" style="font-size:small;" href="{% url 'Factories:FactoryList' %}">
+                                       <i class="fas fa-list-ul"></i>
+                                    </a>
+
+                                    <a  class="badge badge-danger" style="font-size:small;" href="{% url 'Factories:FactoryTrachList' %}">
+                                            <i class="fas fa-trash"></i>
+                                    </a>
+                                 </h4>
+
+
+
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="/">الرئيسية</a></li>
+
+                                    <li class="breadcrumb-item">
+                                        <a href="{% url 'Factories:FactoryList' %}">قائمة المصانع
+                                        </a>
+                                    </li>
+
+                                    <li class="breadcrumb-item active"> مصنع {{object.name}}</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                {% if object %}
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                        <div class="card-body">
+
+                                <h4 class="card-title">بيانات المصنع</h4>
+                                <p class="card-title-desc">Example of custom tabs</p>
+
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link " data-toggle="tab" href="#FactoryPayment" role="tab" aria-selected="true">
+                                            <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                            <span class="d-none d-sm-block"> <i class="fas fa-hand-holding-usd"></i>المسحوبات </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+
+                                        <a class="nav-link" data-toggle="tab" id="Outside_tab" href="#Outside_factory" role="tab" aria-selected="true">
+                                            <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                            <span class="d-none d-sm-block"><i class="fas fa-angle-double-right"></i> الخارج</span>
+                                        </a>
+
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#Inside_factory" role="tab" aria-selected="true">
+                                            <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                                            <span class="d-none d-sm-block"><i class="fas fa-dolly"></i> الداخل</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#settings1" role="tab" aria-selected="true">
+                                            <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
+                                            <span class="d-none d-sm-block"><i class="fas fa-print"></i> كشف حساب</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content p-3 text-muted">
+                                    <!--المسحوبات-->
+                                    <div class="tab-pane " id="FactoryPayment" role="tabpanel">
+                                        {% include 'Factory/factory_payment.html' %}
+                                    </div>
+                                    <!--الخارج-->
+                                    <div class="tab-pane " id="Outside_factory" role="tabpanel">
+                                        {% include 'Factory/factory_outside.html' %}
+                                    </div>
+                                    <!--الداخل-->
+                                    <div class="tab-pane" id="Inside_factory" role="tabpanel">
+                                        {% include 'Factory/factory_inside.html' %}
+                                    </div>
+                                    <!--كشف حساب-->
+                                    <div class="tab-pane" id="settings1" role="tabpanel">
+                                        <p class="mb-0">
+                                            Trust fund seitan letterpress, keytar raw denim keffiyeh etsy
+                                            art party before they sold out master cleanse gluten-free squid
+                                            scenester freegan cosby sweater. Fanny pack portland seitan DIY,
+                                            art party locavore wolf cliche high life echo park Austin. Cred
+                                            vinyl keffiyeh DIY salvia PBR, banh mi before they sold out
+                                            farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral,
+                                            mustache readymade keffiyeh craft.
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                    </div>
+                    </div>
+
+                </div>
+
+                {% if is_paginated %}
+                {% include "components/paginator.html" %}
+                {% endif %}
+
+                {% else %}
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <div class="text-center mb-5 mt-5">
+                            <h1 class="display-2 font-weight-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>4</h1>
+                            {% if type == "list" %}
+                            <h4 class="text-uppercase">لا توجد بيانات</h4>
+                            {% else %}
+                            <h4 class="text-uppercase">لا توجد بيانات محذوفة</h4>
+                            {% endif %}
+                            <div class="mt-3 text-center">
+
+                                {% if type == "list" %}
+                                    <a class="btn btn-primary waves-effect waves-light" href="{% url 'Factories:FactoryCreate' %}" data-toggle="modal" data-target="#action_modal">اضافة بيانات</a>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-12 d-flex justify-content-center ">
+
+                        <img src="/static/assets/images/error-img.png" width="400px" height="188px" alt="" class="img-fluid" >
+
+                    </div>
+                </div>
+
+                {% endif %}
+
+          </div>
+      </div>
+  </div>
+
+
+
+
+
+{% endblock main %}
