@@ -35,7 +35,7 @@
                         <div class="page-title-box d-flex align-items-center justify-content-between">
 
 
-                                <h4 class="mb-0"> مصنع: {{object.name}}
+                                <h4 class="mb-0">
                                      <a class="badge badge-success" style="font-size:small;" href="{% url 'Factories:FactoryCreate' %}" data-toggle="modal" data-target="#action_modal">
                                             <i class="fas fa-plus-square fx-2"></i>
                                     </a>
@@ -76,8 +76,88 @@
                         <div class="card">
                         <div class="card-body">
 
-                                <h4 class="card-title">بيانات المصنع</h4>
-                                <p class="card-title-desc">Example of custom tabs</p>
+                                <h3>بيانات مصنع: {{object.name}}</h3>
+
+                                <div  class="alert alert-primary">
+                                    <ul >
+                                        <li style="display: inline; margin-left: 50px">
+                                            <span class="  font-size-14" >
+                                                <i class="fas fa-paragraph"></i>
+                                                أسم المصنع:
+                                            </span>
+                                            {{object.name}}
+                                        </li>
+
+                                        <li style="display: inline; margin-left: 50px">
+                                            <span class="  font-size-14" >
+                                                <i class="fas fa-database"></i>
+                                                 نوع المكينة:
+                                            </span>
+                                            {{object.machine_type}}
+                                        </li>
+
+                                        <li style="display: inline; margin-left: 50px">
+                                            <span class="  font-size-14" >
+                                               <i class="fas fa-sort-numeric-up-alt"></i>
+                                                 عدد المكينات:
+                                            </span>
+                                            {{object.machine_count}}
+                                        </li>
+
+                                        <li style="display: inline; margin-left: 50px">
+                                            <span class="  font-size-14" >
+                                                <i class="fas fa-calendar-alt"></i>
+                                                 تاريخ البداية:
+                                            </span>
+                                            {{object.start_date| date:'Y-m-d'}}
+                                        </li>
+
+                                        <li style="display: inline; margin-left: 50px">
+                                            <span class="  font-size-14" >
+                                                <i class="fas fa-dollar-sign"></i>
+                                                سعر الساعه:
+                                            </span>
+                                            {{object.hour_price}} جنية
+                                        </li>
+
+                                         <li style="display: inline; margin-left: 50px">
+                                            <span class="  font-size-14" >
+                                                <i class="fas fa-mobile"></i>
+                                                 رقم الهاتف:
+                                            </span>
+                                             {{object.phone}}
+                                        </li>
+
+                                        <li style="display: inline; margin-left: 50px">
+                                            <span class="  font-size-14" >
+                                               <i class="fas fa-wrench"></i>
+                                                 يعمل:
+                                            </span>
+                                            {% if object.active == 1 %}
+                                            <span class="badge badge-success"> نعم</span>
+                                            {% else %}
+                                            <span class="badge badge-danger">لا</span>
+                                            {% endif %}
+
+                                        </li>
+
+                                        <li style="display: inline;  float: left">
+
+                                 <a href="{% url 'Factories:FactoryUpdate' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Message">
+                                     <span class="badge  badge-info"><i class='bx bx-edit' ></i>تعديل</span>
+                                </a>
+
+
+                                <a href="{% url 'Factories:FactoryDelete' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Profile">
+                                    <span class="badge  badge-danger"><i class='bx bxs-trash'  ></i>حذف</span>
+                                </a>
+
+
+                                        </li>
+
+                                    </ul>
+                                </div>
+
 
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
@@ -102,7 +182,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#settings1" role="tab" aria-selected="true">
+                                        <a class="nav-link"  href="{% url 'Factories:PrintAll' object.id %}" target="_blank"  aria-selected="true">
                                             <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
                                             <span class="d-none d-sm-block"><i class="fas fa-print"></i> كشف حساب</span>
                                         </a>
@@ -125,15 +205,7 @@
                                     </div>
                                     <!--كشف حساب-->
                                     <div class="tab-pane" id="settings1" role="tabpanel">
-                                        <p class="mb-0">
-                                            Trust fund seitan letterpress, keytar raw denim keffiyeh etsy
-                                            art party before they sold out master cleanse gluten-free squid
-                                            scenester freegan cosby sweater. Fanny pack portland seitan DIY,
-                                            art party locavore wolf cliche high life echo park Austin. Cred
-                                            vinyl keffiyeh DIY salvia PBR, banh mi before they sold out
-                                            farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral,
-                                            mustache readymade keffiyeh craft.
-                                        </p>
+
                                     </div>
                                 </div>
 

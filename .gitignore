@@ -114,6 +114,7 @@ venv.bak/
 .db
 .sqlite3
 db/
+db/db.sqlite3
 
 # Spyder project settings
 .spyderproject
