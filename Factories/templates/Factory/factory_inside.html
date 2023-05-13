@@ -7,24 +7,9 @@
                     <div class="tab-pane" id="processing_Inside" role="tabpanel">
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="bg-dark">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="text-primary p-3">
-
-                                                    <h3 class="text-center font-weight-bold" style="color: white;">
-                                                        <i class="fas fa-dolly"></i>
-                                                          المستلم من المصنع
-                                                    </h3>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
                                      {% if factory.deleted == 0 %}
                                     <div class="table-responsive" id="order_list">
-                                        <table class="table table-nowrap mb-0">
+                                        <table class="table table-nowrap table-borderless">
                                             <thead>
                                                 <form >
 
@@ -45,15 +30,7 @@
                                                     <th class="col-lg-1 col-xl-1 col-md-1">{{form_inside.hour_price|as_crispy_field}}</th>
                                                     <th class="col-lg-1 col-xl-1 col-md-1">{{form_inside.total_account|as_crispy_field}}</th>
                                                     <th class="col-lg-1 col-xl-1 col-md-1">
-                                                        <a style="width: 50%" onclick="InSideCreate()" class="btn btn-success">اضافة</a>
-                                                        <a href="{% url 'Factories:FactoryInSideReport' object.id %}"
-                                                          style="width: 50%"
-                                                          class="btn btn-primary"
-                                                          target='_blank'
-                                                        >
-                                                        <i class="fas fa-file-alt"></i>
-                                                            تقرير
-                                                        </a>
+                                                        <a onclick="InSideCreate()" class="btn btn-block btn-success">اضافة</a>
                                                     </th>
                                                 </tr>
 
@@ -67,21 +44,21 @@
                                     </div>
                                     {% endif %}
                                      <style>
-                                         .table-responsive{
-                                            max-height: 500px;
+                                         /*.table-responsive{*/
+                                         /*   max-height: 500px;*/
 
-                                         }
+                                         /*}*/
 
-                                         .scroll{
-                                            overflow-y: scroll;
-                                            overflow-x: scroll;
-                                         }
-                                         .table-responsive::-webkit-scrollbar{
-                                            display: none;
-                                         }
+                                         /*.scroll{*/
+                                            /*overflow-y: scroll;*/
+                                            /*overflow-x: scroll;*/
+                                         /*}*/
+                                         /*.table-responsive::-webkit-scrollbar{*/
+                                         /*   display: none;*/
+                                         /*}*/
                                      </style>
 
-                                    <div class="card-body" id="inside"  >
+                                    <div id="inside"  >
                                         <div class="table-responsive scroll" >
                                             <table class="table table-centered table-dark table-nowrap text-center">
                                                 <thead >
