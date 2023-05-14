@@ -76,94 +76,83 @@
                         <div class="card">
                         <div class="card-body">
 
-                                <h3>بيانات مصنع: {{object.name}}</h3>
-
-                                <div  class="alert alert-primary">
-
-                                    <ul >
-                                        <li style="display: inline; margin-left: 50px">
-                                            <span class="  font-size-14" >
-                                                <i class="fas fa-paragraph"></i>
-                                                أسم المصنع:
-                                            </span>
-                                            {{object.name}}
-                                        </li>
-
-                                        <li style="display: inline; margin-left: 50px">
-                                            <span class="  font-size-14" >
-                                                <i class="fas fa-database"></i>
-                                                 نوع المكينة:
-                                            </span>
-                                            {{object.machine_type}}
-                                        </li>
-
-                                        <li style="display: inline; margin-left: 50px">
-                                            <span class="  font-size-14" >
-                                               <i class="fas fa-sort-numeric-up-alt"></i>
-                                                 عدد المكينات:
-                                            </span>
-                                            {{object.machine_count}}
-                                        </li>
-
-                                        <li style="display: inline; margin-left: 50px">
-                                            <span class="  font-size-14" >
-                                                <i class="fas fa-calendar-alt"></i>
-                                                 تاريخ البداية:
-                                            </span>
-                                            {{object.start_date| date:'Y-m-d'}}
-                                        </li>
-                                    </ul>
-                                    <ul>
-
-                                        <li style="display: inline; margin-left: 50px">
-                                            <span class="  font-size-14" >
-                                                <i class="fas fa-dollar-sign"></i>
-                                                سعر الساعه:
-                                            </span>
-                                            {{object.hour_price}} جنية
-                                        </li>
-
-                                         <li style="display: inline; margin-left: 50px">
-                                            <span class="  font-size-14" >
-                                                <i class="fas fa-mobile"></i>
-                                                 رقم الهاتف:
-                                            </span>
-                                             {{object.phone}}
-                                        </li>
-
-                                        <li style="display: inline; margin-left: 50px">
-                                            <span class="  font-size-14" >
-                                               <i class="fas fa-wrench"></i>
-                                                 يعمل:
-                                            </span>
-                                            {% if object.active == 1 %}
-                                            <span class="badge badge-success"> نعم</span>
-                                            {% else %}
-                                            <span class="badge badge-danger">لا</span>
-                                            {% endif %}
-
-                                        </li>
-
-
-                                        <li style="display: inline;  float: left">
-
-                                            <a href="{% url 'Factories:FactoryUpdate' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Message">
-                                                <span class="badge  badge-info"><i class='bx bx-edit' ></i>تعديل</span>
-                                            </a>
-
-
-                                            <a href="{% url 'Factories:FactoryDelete' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Profile">
-                                                <span class="badge  badge-danger"><i class='bx bxs-trash'  ></i>حذف</span>
-                                            </a>
-
-
-                                        </li>
-                                    </ul>
-                                    
-
-                                    
-                                   
+                            <!-- بيانات المصنع -->
+                            <div class="row alert alert-primary">
+                                <div class="col-lg-3">
+                                    <span class="font-weight-bold  font-size-14" >
+                                        <i class="fas fa-paragraph"></i>
+                                        أسم المصنع:
+                                    </span>
+                                    {{object.name}}
                                 </div>
+                                <div class="col-lg-3">
+                                    <span class="font-weight-bold  font-size-14" >
+                                        <i class="fas fa-database"></i>
+                                            نوع المكينة:
+                                    </span>
+                                    {{object.machine_type}}
+                                </div>
+                                <div class="col-lg-3">
+                                    <span class="font-weight-bold  font-size-14" >
+                                        <i class="fas fa-sort-numeric-up-alt"></i>
+                                            عدد المكينات:
+                                        </span>
+                                        {{object.machine_count}}
+                                </div>
+                                <div class="col-lg-3">
+                                    <span class="font-weight-bold  font-size-14" >
+                                        <i class="fas fa-calendar-alt"></i>
+                                            تاريخ البداية:
+                                    </span>
+                                    {{object.start_date| date:'Y-m-d'}}
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <span class="font-weight-bold  font-size-14" >
+                                        <i class="fas fa-dollar-sign"></i>
+                                        سعر الساعه:
+                                    </span>
+                                    {{object.hour_price}} جنية
+                                </div>
+
+                                <div class="col-lg-3">
+                                    
+                                        <span class="font-weight-bold font-size-14" >
+                                            <i class="fas fa-mobile"></i>
+                                                رقم الهاتف:
+                                        </span>
+                                            {{object.phone}}
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <span class="font-weight-bold  font-size-14" >
+                                        <i class="fas fa-wrench"></i>
+                                            يعمل:
+                                        </span>
+                                        {% if object.active == 1 %}
+                                        <span class="badge badge-success"> نعم</span>
+                                        {% else %}
+                                        <span class="badge badge-danger">لا</span>
+                                        {% endif %}
+                                </div>
+
+                                <div class="col-lg-3">
+                                    
+                                    <div>
+                                    <a href="{% url 'Factories:FactoryUpdate' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Message">
+                                        <span class="badge  badge-info"><i class='bx bx-edit' ></i>تعديل</span>
+                                    </a>
+
+
+                                    <a href="{% url 'Factories:FactoryDelete' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Profile">
+                                        <span class="badge  badge-danger"><i class='bx bxs-trash'  ></i>حذف</span>
+                                    </a>
+                                    </div>
+
+                                </div>
+                                
+                            </div>
+                            <!-- نهاية بيانات المصنع -->
 
 
                                 <!-- Nav tabs -->

@@ -206,14 +206,14 @@
                                 <script src="/static/assets/libs/jquery/jquery.min.js"></script>
                                     <script>
 
-                                        $( '#product').on('change', function () {
+                                            $( '#product' ).on('change', function () {
                                             e = this.value;
                                             $.ajax({
                                                 url: "{% url 'Factories:get_product_weight_time' %}?e=" + e,
                                                 success: function (data) {
                                                     $("#product_weight").val(data.prod_weight);
                                                     $("#product_time").val(data.prod_time);
-                                                    const weight = $('#weight').val() * 1000;
+                                                    const weight = $('#weight_inside').val() * 1000;
                                                     const product_weight = data.prod_weight;
                                                     let product_count = (weight / product_weight);
                                                     $('#product_count').val(parseInt(product_count));
@@ -223,11 +223,11 @@
                                             });
                                         });
 
-                                        // حساب عدد القطع
+                                        // حساب عدد القطع 
                                        $('#product_weight').on('keyup change', function (){
                                             const weight = $('#weight_inside').val() * 1000;
                                             const product_weight = $('#product_weight').val();
-                                            let product_count = (weight / product_weight);
+                                            let product_count = (weight / product_weight); 
                                             $('#product_count').val(parseInt(product_count));
                                             $('#product_count').change();
                                             $('#hour_price').change();
@@ -241,8 +241,8 @@
                                             $('#product_count').change();
                                             $('#hour_price').change();
                                        });
-
-                                       // حساب عدد الساعات
+                                       
+                                       // حساب عدد الساعات 
                                        $('#product_time').on('keyup change', function (){
 
                                            const product_count = $('#product_count').val();
@@ -250,8 +250,8 @@
 
                                            if ((product_count * product_hour) / 60 < 1){
                                                $('label[for="hour_count"]').text('عدد الدقائق');
-                                               var val = (product_count * product_hour) % 60;
-                                               $('#hour_count').val(val);
+                                               var val_hour = (product_count * product_hour) % 60;
+                                               $('#hour_count').val(val_hour);
                                            }
                                            else {
                                                $('label[for="hour_count"]').text('عدد الساعات');
@@ -311,7 +311,7 @@
                                            let total_account_value = parseFloat(val1 * hour_price) + parseFloat(val2 * hour_price);
                                            $('#total_account').val((total_account_value).toFixed(2));
                                        });
-
+                                       
                                         function InSideCreate(){
                                             $.ajax({
                                                 type : "POST",
