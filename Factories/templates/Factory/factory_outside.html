@@ -179,26 +179,28 @@
                             <script src="/static/assets/libs/jquery/jquery.min.js"></script>
 
                             <script>
-                                $('#weight').on('keyup change', function () {
-                                    const weight = $('#weight').val();
-                                    const percent_loss = $('#percent_loss').val();
-                                    if (percent_loss == 0) {
-                                        $('#weight_after_loss').val(weight)
-                                    } else {
-                                        let prcent_loss_valu = (weight - (weight * percent_loss) / 100);
-                                        $('#weight_after_loss').val(prcent_loss_valu);
-                                    }
-                                });
+                                $(document).ready(function() {
+                                    $('#weight').on('keyup change', function () {
+                                        const weight = $('#weight').val();
+                                        const percent_loss = $('#percent_loss').val();
+                                        if (percent_loss == 0) {
+                                            $('#weight_after_loss').val(weight)
+                                        } else {
+                                            let prcent_loss_valu = (weight - (weight * percent_loss) / 100);
+                                            $('#weight_after_loss').val(prcent_loss_valu);
+                                        }
+                                    });
 
-                                $('#percent_loss').on('keyup change', function () {
-                                    const weight = $('#weight').val();
-                                    const percent_loss = $('#percent_loss').val();
-                                    if (percent_loss == 0) {
-                                        $('#weight_after_loss').val(weight)
-                                    } else {
-                                        let prcent_loss_valu = (weight - (weight * percent_loss) / 100);
-                                        $('#weight_after_loss').val(prcent_loss_valu);
-                                    }
+                                    $('#percent_loss').on('keyup change', function () {
+                                        const weight = $('#weight').val();
+                                        const percent_loss = $('#percent_loss').val();
+                                        if (percent_loss == 0) {
+                                            $('#weight_after_loss').val(weight)
+                                        } else {
+                                            let prcent_loss_valu = (weight - (weight * percent_loss) / 100);
+                                            $('#weight_after_loss').val(prcent_loss_valu);
+                                        }
+                                    });
                                 });
 
                                 function OutSideCreate() {
@@ -226,7 +228,8 @@
                                                 $('#weight_after_loss').val('');
                                                 $('#outside').html('&nbsp;').load("{% url 'Factories:FactoryOutSide_div' object.id %}");
                                                 alert("تم الاضافة بنجاح");
-
+                                                $( '#inside' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryInSide_div' object.id %}");
+                                                $("#paymnet").html("&nbsp;").load("{% url 'Factories:FactoryPayment_div' object.id %}");
                                             } else {
                                                 alert("حاول مرة اخري / خطأ في البيانات");
                                             }
@@ -263,6 +266,7 @@
                                         }
                                     });
                                 }
+
                             </script>
 
                         </div>
