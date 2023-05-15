@@ -58,6 +58,42 @@
                                          /*}*/
                                      </style>
 
+                                    <div class="table-responsive">
+                                        <table class="table table-centered table-dark table-nowrap text-center">
+                                            <thead>
+                                                <tr>
+                                                    <td style="width: 35%" class="in_sel">
+                                                        <select class="form-control" id="in_specific_product" style="width: 100%" onchange="InProductFilter(this)">
+                                                            <option disabled selected value="">عرض كميات منتج معين؟</option>
+                                                            <option value=" ">كل المنتجات</option>
+                                                            {% for product in products %}
+                                                            <option value="{{ product.id }}">{{ product.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </td>
+                                                    <td style="width: 35%" class="in_sell">
+                                                        <select class="form-control" id="in_specific_wool" style="width: 100%" onchange="InWoolFilter(this)">
+                                                            <option disabled selected value="">عرض كميات خامة معينة؟</option>
+                                                            <option value=" ">كل الخامات</option>
+                                                            <option value="1">قطن</option>
+                                                            <option value="2">صوف</option>
+                                                            <option value="3">عجينة</option>
+                                                            <option value="4">سبن</option>
+                                                            <option value="5">لكرة</option>
+                                                            <option value="6">رمش</option>
+                                                            <option value="7">عصب</option>
+                                                            <option value="8">بلستر</option>
+                                                            <option value="9">استك</option>
+                                                        </select>
+                                                    </td>
+                                                    <td style="width: 30%">
+                                                        <input type="date" class="form-control" id="in_specific_date" style="width: 100%" onchange="InDateFilter(this)">
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+
                                     <div id="inside"  >
                                         <div class="table-responsive scroll" >
                                             <table class="table table-centered table-dark table-nowrap text-center">
@@ -117,25 +153,25 @@
 
                                         <div style="margin-top:10px">
                                             <div class="row">
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-3">
                                                     <div class="card mini-stats-wid mb-0">
                                                         <div class="card-body bg-danger">
 
                                                             <div class="d-flex flex-wrap">
                                                                 <div class="mr-3">
-                                                                    <h3 class=" mb-2 text-light">اجمالي الوزن الخارج</h3>
-                                                                    <h3 class="mb-0 text-dark">
+                                                                    <h5 class=" mb-2 text-light">اجمالي الوزن الخارج</h5>
+                                                                    <h5 class="mb-0 text-dark">
                                                                         {% if sum_outside %}
                                                                         {{sum_outside}}
                                                                         {% else %}
                                                                         0.0
                                                                         {% endif %}
                                                                         كيلو جرام
-                                                                    </h3>
+                                                                    </h5>
                                                                 </div>
 
 
-                                                                <div class="avatar-sm ml-auto">
+                                                                <div class="avatar-xs ml-auto">
                                                                     <div class="avatar-title bg-light rounded-circle text-dark font-size-20">
                                                                         <i class="fas fa-sign-out-alt"></i>
                                                                     </div>
@@ -145,24 +181,24 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-3">
                                                     <div class="card mini-stats-wid mb-0">
                                                         <div class="card-body bg-danger">
 
                                                             <div class="d-flex flex-wrap">
                                                                 <div class="mr-3">
-                                                                    <h3 class=" mb-2 text-light">اجمالي الوزن المستلم</h3>
-                                                                    <h3 class="mb-0 text-dark">
+                                                                    <h5 class=" mb-2 text-light">اجمالي الوزن المستلم</h5>
+                                                                    <h5 class="mb-0 text-dark">
                                                                         {% if sum_weightt %}
                                                                         {{sum_weightt}}
                                                                         {% else %}
                                                                         0.0
                                                                         {% endif %}
-                                                                        كيلو جرام</h3>
+                                                                        كيلو جرام</h5>
                                                                 </div>
 
 
-                                                                <div class="avatar-sm ml-auto">
+                                                                <div class="avatar-xs ml-auto">
                                                                     <div class="avatar-title bg-light rounded-circle text-dark font-size-20">
                                                                         <i class="fas fa-dolly"></i>
                                                                     </div>
@@ -172,24 +208,51 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-3">
                                                     <div class="card mini-stats-wid mb-0">
                                                         <div class="card-body bg-danger">
 
                                                             <div class="d-flex flex-wrap">
                                                                 <div class="mr-3">
-                                                                    <h3 class=" mb-2 text-light">اجمالي الحساب</h3>
-                                                                    <h3 class="mb-0 text-dark">
+                                                                    <h5 class=" mb-2 text-light">عدد القطع</h5>
+                                                                    <h5 class="mb-0 text-dark">
+                                                                        {% if products_count %}
+                                                                        {{products_count}}
+                                                                        {% else %}
+                                                                        0
+                                                                        {% endif %}
+                                                                        قطعة</h5>
+                                                                </div>
+
+
+                                                                <div class="avatar-xs ml-auto">
+                                                                    <div class="avatar-title bg-light rounded-circle text-dark font-size-20">
+                                                                        <i class="fas fa-list-ol"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="card mini-stats-wid mb-0">
+                                                        <div class="card-body bg-danger">
+
+                                                            <div class="d-flex flex-wrap">
+                                                                <div class="mr-3">
+                                                                    <h5 class=" mb-2 text-light">اجمالي الحساب</h5>
+                                                                    <h5 class="mb-0 text-dark">
                                                                         {% if sum_weightt_after %}
                                                                         {{sum_weightt_after}}
                                                                         {% else %}
                                                                         0.0
                                                                         {% endif %}
-                                                                        جنية</h3>
+                                                                        جنية</h5>
                                                                 </div>
 
 
-                                                                <div class="avatar-sm ml-auto">
+                                                                <div class="avatar-xs ml-auto">
                                                                     <div class="avatar-title bg-light rounded-circle text-dark font-size-20">
                                                                         <i class="fas fa-dollar-sign"></i>
                                                                     </div>
@@ -199,12 +262,15 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
                                     <script src="/static/assets/libs/jquery/jquery.min.js"></script>
                                     <script>
+                                        $(document).ready(function() {
+                                            $('#in_specific_product').select2();
+                                            $('#in_specific_wool').select2();
+                                        });
 
                                         $(document).ready(function() {
                                             $( '#product' ).on('change', function () {
@@ -316,53 +382,57 @@
                                         });
 
                                         function InSideCreate(){
-                                            $.ajax({
-                                                type : "POST",
-                                                url : "{% url 'Factories:FactoryInSideCreate'  %}",
-                                                data : {
-                                                    id : '{{object.id}}' ,
-                                                    date : $('#date_inside').val(),
-                                                    weight :$('#weight_inside').val(),
-                                                    color : $('#color_inside').val(),
-                                                    wool_type : $('#wool_type_inside').val(),
-                                                    product : $('#product').val(),
-                                                    product_weight : $('#product_weight').val(),
-                                                    product_time : $('#product_time').val(),
-                                                    product_count : $('#product_count').val(),
-                                                    hour_count : $('#hour_count').val(),
-                                                    hour_price : $('#hour_price').val(),
-                                                    total_account : $('#total_account').val(),
-                                                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                                                    dataType: "json",
-                                                },
-                                                success: function(response){
-                                                    /* response message */
-                                                    if(response.msg == 1){
-                                                        $('#weight_inside').val('');
-                                                        $('#color_inside').val('');
-                                                        $('#wool_type_inside').val('');
-                                                        $('#product').val('');
-                                                        $('#product_weight').val('');
-                                                        $('#product_time').val('');
-                                                        $('#product_count').val('');
-                                                        $('#hour_count').val('');
-                                                        //$('#hour_price').val('');
-                                                        $('#total_account').val('');
-                                                        $( '#inside' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryInSide_div' object.id %}");
-                                                        alert("تم الاضافة بنجاح");
-                                                        $('#outside').html('&nbsp;').load("{% url 'Factories:FactoryOutSide_div' object.id %}");
-                                                        $("#paymnet").html("&nbsp;").load("{% url 'Factories:FactoryPayment_div' object.id %}");
-                                                    }else{
-                                                        alert("حاول مرة اخري / خطأ في البيانات");
-                                                    }
+                                            if ($('#product_count').val() % 1 !== 0){
+                                                alert('عدد الموديل يجب أن يكون عدد صحيح')
+                                            }
+                                            else {
+                                                $.ajax({
+                                                    type : "POST",
+                                                    url : "{% url 'Factories:FactoryInSideCreate'  %}",
+                                                    data : {
+                                                        id : '{{object.id}}' ,
+                                                        date : $('#date_inside').val(),
+                                                        weight :$('#weight_inside').val(),
+                                                        color : $('#color_inside').val(),
+                                                        wool_type : $('#wool_type_inside').val(),
+                                                        product : $('#product').val(),
+                                                        product_weight : $('#product_weight').val(),
+                                                        product_time : $('#product_time').val(),
+                                                        product_count : parseInt($('#product_count').val()),
+                                                        hour_count : $('#hour_count').val(),
+                                                        hour_price : $('#hour_price').val(),
+                                                        total_account : $('#total_account').val(),
+                                                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                                                        dataType: "json",
+                                                    },
+                                                    success: function(response){
+                                                        /* response message */
+                                                        if(response.msg == 1){
+                                                            $('#weight_inside').val('');
+                                                            $('#color_inside').val('');
+                                                            $('#wool_type_inside').val('');
+                                                            $('#product').val('');
+                                                            $('#product_weight').val('');
+                                                            $('#product_time').val('');
+                                                            $('#product_count').val('');
+                                                            $('#hour_count').val('');
+                                                            //$('#hour_price').val('');
+                                                            $('#total_account').val('');
+                                                            $( '#inside' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryInSide_div' object.id %}");
+                                                            alert("تم الاضافة بنجاح");
+                                                            $('#outside').html('&nbsp;').load("{% url 'Factories:FactoryOutSide_div' object.id %}");
+                                                            $("#paymnet").html("&nbsp;").load("{% url 'Factories:FactoryPayment_div' object.id %}");
+                                                        }else{
+                                                            alert("حاول مرة اخري / خطأ في البيانات");
+                                                        }
 
-                                                 },
+                                                     },
 
-                                                 failure: function() {
+                                                     failure: function() {
 
-                                                 }
-                                            });
-
+                                                     }
+                                                });
+                                            }
 
                                         };
 
@@ -388,6 +458,56 @@
                                             });
                                         }
 
+                                    </script>
+                                    <script>
+                                        function InProductFilter(val) {
+                                            if (val.value && val.value!= ' '){
+                                                $( '.in_sel' ).find('.select2-container').find('.select2-selection--single').css("background-color","lightgreen");
+                                            }
+                                            else {
+                                                $( '.in_sel' ).find('.select2-container').find('.select2-selection--single').css("background-color","");
+                                            }
+
+                                            $( '#in_specific_date' ).css("background-color","");
+                                            $( '#in_specific_date' ).val('');
+                                            $('#in_specific_wool').select2('destroy');
+                                            $('#in_specific_wool').val('').select2();
+
+                                            product_id = val.value;
+                                            $( '#inside' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryInSide_div' object.id %}?product_id=" + product_id );
+                                        };
+                                        function InWoolFilter(val) {
+                                            if (val.value && val.value!= ' '){
+                                                $( '.in_sell' ).find('.select2-container').find('.select2-selection--single').css("background-color","lightgreen");
+                                            }
+                                            else {
+                                                $( '.in_sell' ).find('.select2-container').find('.select2-selection--single').css("background-color","");
+                                            }
+
+                                            $( '#in_specific_date' ).css("background-color","");
+                                            $( '#in_specific_date' ).val('');
+                                            $('#in_specific_product').select2('destroy');
+                                            $('#in_specific_product').val('').select2();
+
+                                            wool_val = val.value;
+                                            $( '#inside' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryInSide_div' object.id %}?wool_val=" + wool_val );
+                                        };
+                                        function InDateFilter(val) {
+                                            if (val.value){
+                                                val.style.backgroundColor = 'lightgreen';
+                                            }
+                                            else {
+                                                val.style.backgroundColor = '';
+                                            }
+
+                                            $('#in_specific_product').select2('destroy');
+                                            $('#in_specific_product').val('').select2();
+                                            $('#in_specific_wool').select2('destroy');
+                                            $('#in_specific_wool').val('').select2();
+
+                                            date_val = val.value;
+                                            $( '#inside' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryInSide_div' object.id %}?date_val=" + date_val );
+                                        };
                                     </script>
                             </div>
                         </div>

@@ -64,6 +64,18 @@ style="width: 50%"
 /*}*/
 </style>
 
+<div class="table-responsive">
+    <table class="table table-centered table-dark table-nowrap text-center">
+        <thead>
+            <tr>
+                <td style="width: 30%">
+                    <input type="date" class="form-control" id="pay_specific_date" style="width: 100%" onchange="PayDateFilter(this)">
+                </td>
+            </tr>
+        </thead>
+    </table>
+</div>
+
 <div id="paymnet">
 <div class="table-responsive scroll">
 <table
@@ -133,17 +145,17 @@ class="table table-centered table-dark table-nowrap text-center"
 <div class="d-flex flex-wrap">
   <div class="mr-3">
     <h5 class="mb-2 text-light">الحساب المستحق</h5>
-    <h3 class="mb-0 text-dark">
+    <h5 class="mb-0 text-dark">
         {% if total_account %}
         {{total_account}}
         {% else %}
         0.0
         {% endif %}
         جنية
-    </h3>
+    </h5>
   </div>
 
-  <div class="avatar-sm ml-auto">
+  <div class="avatar-xs ml-auto">
     <div
       class="avatar-title bg-light rounded-circle text-dark font-size-20"
     >
@@ -162,17 +174,17 @@ class="table table-centered table-dark table-nowrap text-center"
     <h5 class="mb-2 text-light">
       اجمالي المسحوبات
     </h5>
-    <h3 class="mb-0 text-dark">
+    <h5 class="mb-0 text-dark">
         {% if payment_sum %}
         {{payment_sum}}
         {% else %}
         0.0
         {% endif %}
         جنية
-    </h3>
+    </h5>
   </div>
 
-  <div class="avatar-sm ml-auto">
+  <div class="avatar-xs ml-auto">
     <div
       class="avatar-title bg-light rounded-circle text-dark font-size-20"
     >
@@ -189,16 +201,16 @@ class="table table-centered table-dark table-nowrap text-center"
 <div class="d-flex flex-wrap">
   <div class="">
     <h5 class="mb-2 text-light">باقي الحساب</h5>
-    <h3 class="mb-0 text-dark">
+    <h5 class="mb-0 text-dark">
         {% if total %}
         {{total}}
         {% else %}
         0.0
         {% endif %}
-        جنية</h3>
+        جنية</h5>
   </div>
 
-  <div class="avatar-sm ml-auto">
+  <div class="avatar-xs ml-auto">
     <div
       class="avatar-title bg-light rounded-circle text-dark font-size-20"
     >
@@ -269,6 +281,19 @@ failure: function () {},
 });
 }
 </script>
+<script>
+    function PayDateFilter(val) {
+        if (val.value){
+            val.style.backgroundColor = 'lightgreen';
+        }
+        else {
+            val.style.backgroundColor = '';
+        }
+        date_val = val.value;
+        $( '#paymnet' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryPayment_div' object.id %}?date_val=" + date_val );
+    };
+</script>
+
 </div>
 </div>
 </div>

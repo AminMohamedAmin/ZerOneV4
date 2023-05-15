@@ -57,8 +57,11 @@
                                     <li class="breadcrumb-item"><a href="/">الرئيسية</a></li>
 
                                     <li class="breadcrumb-item">
-                                        <a href="{% url 'Factories:FactoryList' %}">قائمة المصانع
-                                        </a>
+                                        {% if object.deleted %}
+                                        <a href="{% url 'Factories:FactoryTrachList' %}">قائمة المصانع المحذوفة</a>
+                                        {% else %}
+                                        <a href="{% url 'Factories:FactoryList' %}">قائمة المصانع</a>
+                                        {% endif %}
                                     </li>
 
                                     <li class="breadcrumb-item active"> مصنع {{object.name}}</li>
@@ -139,14 +142,21 @@
                                 <div class="col-lg-3">
                                     
                                     <div>
+                                    {% if object.deleted %}
+                                    <a href="{% url 'Factories:FactoryRestore' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Message">
+                                        <span class="badge badge-dark"><i class='bx bx-redo '></i> استرجاع</span>
+                                    </a>
+                                    <a href="{% url 'Factories:FactorySuperDelete' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Profile">
+                                        <span class="badge badge-danger"><i class='bx bxs-trash '   ></i> حذف نهائي </span>
+                                    </a>
+                                    {% else %}
                                     <a href="{% url 'Factories:FactoryUpdate' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Message">
                                         <span class="badge  badge-info"><i class='bx bx-edit' ></i>تعديل</span>
                                     </a>
-
-
                                     <a href="{% url 'Factories:FactoryDelete' object.id %}" data-toggle="modal" data-target="#action_modal" data-placement="top" title="" data-original-title="Profile">
                                         <span class="badge  badge-danger"><i class='bx bxs-trash'  ></i>حذف</span>
                                     </a>
+                                    {% endif %}
                                     </div>
 
                                 </div>
