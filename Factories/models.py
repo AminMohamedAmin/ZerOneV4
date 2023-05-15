@@ -76,7 +76,7 @@ class FactoryInSide(models.Model):
     weight = models.FloatField(null=True, blank=True, verbose_name="الوزن بالكيلو")
     product_weight = models.FloatField(null=True, blank=True, verbose_name="وزن الموديل جرام")
     product_time = models.FloatField(null=True, blank=True, verbose_name="زمن الموديل دقائق")
-    product_count = models.FloatField(null=True, blank=True, verbose_name="عدد الموديل")
+    product_count = models.IntegerField(null=True, blank=True, verbose_name="عدد الموديل")
     # product_type = models.IntegerField(choices=PRODUCT_TYPE, null=True, blank=True, verbose_name="نوع القطع")
     wool_type = models.IntegerField(choices=WOOL_TYPE, null=True, blank=True, verbose_name="نوع الخامة")
     hour_count = models.FloatField(null=True, blank=True, verbose_name="عدد الساعات")

@@ -63,6 +63,33 @@
                                 /*}*/
                             </style>
 
+                            <div class="table-responsive">
+                                <table class="table table-centered table-dark table-nowrap text-center">
+                                    <thead>
+                                        <tr>
+                                            <td style="width: 60%" class="out_sell">
+                                                <select class="form-control" id="out_specific_wool" style="width: 100%" onchange="OutWoolFilter(this)">
+                                                    <option disabled selected value="">عرض كميات خامة معينة؟</option>
+                                                    <option value=" ">كل الخامات</option>
+                                                    <option value="1">قطن</option>
+                                                    <option value="2">صوف</option>
+                                                    <option value="3">عجينة</option>
+                                                    <option value="4">سبن</option>
+                                                    <option value="5">لكرة</option>
+                                                    <option value="6">رمش</option>
+                                                    <option value="7">عصب</option>
+                                                    <option value="8">بلستر</option>
+                                                    <option value="9">استك</option>
+                                                </select>
+                                            </td>
+                                            <td style="width: 40%">
+                                                <input type="date" class="form-control" id="out_specific_date" style="width: 100%" onchange="OutDateFilter(this)">
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
                             <div id="outside">
                                 <div class="table-responsive scroll">
                                     <table class="table table-centered table-dark table-nowrap text-center">
@@ -123,18 +150,18 @@
 
                                                     <div class="d-flex flex-wrap">
                                                         <div class="mr-3">
-                                                            <h3 class=" mb-2 text-light">اجمالي الوزن</h3>
-                                                            <h3 class="mb-0 text-dark">
+                                                            <h5 class=" mb-2 text-light">اجمالي الوزن</h5>
+                                                            <h5 class="mb-0 text-dark">
                                                                 {% if sum_weight %}
                                                                 {{sum_weight}}
                                                                 {% else %}
                                                                 0.0
                                                                 {% endif %}
-                                                                كيلو جرام</h3>
+                                                                كيلو جرام</h5>
                                                         </div>
 
 
-                                                        <div class="avatar-sm ml-auto">
+                                                        <div class="avatar-xs ml-auto">
                                                             <div class="avatar-title bg-light rounded-circle text-dark font-size-20">
                                                                 <i class="fas fa-balance-scale"></i>
                                                             </div>
@@ -150,18 +177,18 @@
 
                                                     <div class="d-flex flex-wrap">
                                                         <div class="mr-3">
-                                                            <h3 class=" mb-2 text-light">اجمالي الوزن بعدالهالك</h3>
-                                                            <h3 class="mb-0 text-dark">
+                                                            <h5 class=" mb-2 text-light">اجمالي الوزن بعد الهالك</h5>
+                                                            <h5 class="mb-0 text-dark">
                                                                 {% if sum_weight_after %}
                                                                 {{sum_weight_after}}
                                                                 {% else %}
                                                                 0.0
                                                                 {% endif %}
-                                                                كيلو جرام</h3>
+                                                                كيلو جرام</h5>
                                                         </div>
 
 
-                                                        <div class="avatar-sm ml-auto">
+                                                        <div class="avatar-xs ml-auto">
                                                             <div class="avatar-title bg-light rounded-circle text-dark font-size-20">
                                                                 <i class="fas fa-balance-scale"></i>
                                                             </div>
@@ -179,6 +206,10 @@
                             <script src="/static/assets/libs/jquery/jquery.min.js"></script>
 
                             <script>
+                                $(document).ready(function() {
+                                    $('#out_specific_wool').select2();
+                                });
+
                                 $(document).ready(function() {
                                     $('#weight').on('keyup change', function () {
                                         const weight = $('#weight').val();
@@ -267,6 +298,40 @@
                                     });
                                 }
 
+                            </script>
+                            <script>
+                                function OutWoolFilter(val) {
+                                    if (val.value && val.value!= ' '){
+                                        $( '.out_sell' ).find('.select2-container').find('.select2-selection--single').css("background-color","lightgreen");
+                                    }
+                                    else {
+                                        $( '.out_sell' ).find('.select2-container').find('.select2-selection--single').css("background-color","");
+                                    }
+
+                                    $( '#out_specific_date' ).css("background-color","");
+                                    $( '#out_specific_date' ).val('');
+                                    $('#out_specific_product').select2('destroy');
+                                    $('#out_specific_product').val('').select2();
+
+                                    wool_val = val.value;
+                                    $( '#outside' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryOutSide_div' object.id %}?wool_val=" + wool_val );
+                                };
+                                function OutDateFilter(val) {
+                                    if (val.value){
+                                        val.style.backgroundColor = 'lightgreen';
+                                    }
+                                    else {
+                                        val.style.backgroundColor = '';
+                                    }
+
+                                    $('#out_specific_product').select2('destroy');
+                                    $('#out_specific_product').val('').select2();
+                                    $('#out_specific_wool').select2('destroy');
+                                    $('#out_specific_wool').val('').select2();
+
+                                    date_val = val.value;
+                                    $( '#outside' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryOutSide_div' object.id %}?date_val=" + date_val );
+                                };
                             </script>
 
                         </div>

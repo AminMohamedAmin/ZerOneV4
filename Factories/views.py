@@ -105,6 +105,12 @@ class FactoryDetails(LoginRequiredMixin, DetailView):
             context['sum_weightt_after'] = "{:.1f}".format(sum_weightt_after)
         else:
             context['sum_weightt_after'] = "{:.1f}".format(0)
+        products_count = queryset_inside.aggregate(product_count=Sum('product_count')).get('product_count')
+        if products_count:
+            context['products_count'] = int(products_count)
+        else:
+            context['products_count'] = 0
+        context['products'] = Product.objects.all()
 
         # reports
         context['form'] = FactoryPaymentReportForm()
@@ -280,7 +286,10 @@ class FactoryPayment_div(LoginRequiredMixin, DetailView):
     template_name = 'Factory/payment_div.html'
     
     def get_context_data(self, **kwargs):
-        queryset = Payment.objects.filter(factory=self.object).order_by('-date')
+        queryset = Payment.objects.filter(factory=self.object)
+        date_val = self.request.GET.get('date_val')
+        if date_val:
+            queryset = queryset.filter(date=date_val)
         payment_sum = queryset.aggregate(price=Sum('price')).get('price')
         total_account =FactoryInSide.objects.filter(factory=self.object).aggregate(total=Sum('total_account')).get('total')
         if payment_sum:
@@ -402,6 +411,12 @@ class FactoryOutSide_div(LoginRequiredMixin, DetailView):
     
     def get_context_data(self, **kwargs):
         queryset = FactoryOutSide.objects.filter(factory=self.object)
+        wool_val = self.request.GET.get('wool_val')
+        date_val = self.request.GET.get('date_val')
+        if wool_val:
+            queryset = queryset.filter(wool_type=int(wool_val))
+        if date_val:
+            queryset = queryset.filter(date=date_val)
         context = super().get_context_data(**kwargs)
         context['outSide'] = queryset.order_by('-date')
         sum_weight = queryset.aggregate(weight=Sum('weight')).get('weight')
@@ -524,8 +539,14 @@ class FactoryInside(LoginRequiredMixin, DetailView):
             context['sum_weight_after'] = "{:.1f}".format(sum_weight_after)
         else:
             context['sum_weight_after'] = "{:.1f}".format(0)
+        products_count = queryset.aggregate(product_count=Sum('product_count')).get('product_count')
+        if products_count:
+            context['products_count'] = int(products_count)
+        else:
+            context['products_count'] = 0
         context['type'] = 'list'
         context['factory'] = self.object
+        context['products'] = Product.objects.all()
         return context
 
 
@@ -557,6 +578,16 @@ class FactoryInSide_div(LoginRequiredMixin, DetailView):
     
     def get_context_data(self, **kwargs):
         queryset = FactoryInSide.objects.filter(factory=self.object)
+        product_id = self.request.GET.get('product_id')
+        date_val = self.request.GET.get('date_val')
+        wool_val = self.request.GET.get('wool_val')
+        if product_id:
+            product = Product.objects.get(id=int(product_id))
+            queryset = queryset.filter(product=product)
+        if date_val:
+            queryset = queryset.filter(date=date_val)
+        if wool_val:
+            queryset = queryset.filter(wool_type=int(wool_val))
         outSide = FactoryOutSide.objects.filter(factory=self.object)
         context = super().get_context_data(**kwargs)
         context['inSide'] = queryset.order_by('-date')
@@ -575,10 +606,16 @@ class FactoryInSide_div(LoginRequiredMixin, DetailView):
             context['sum_weight_after'] = "{:.1f}".format(sum_weight_after)
         else:
             context['sum_weight_after'] = "{:.1f}".format(0)
+        products_count = queryset.aggregate(product_count=Sum('product_count')).get('product_count')
+        if products_count:
+            context['products_count'] = int(products_count)
+        else:
+            context['products_count'] = 0
         form = FactoryInSideForm(self.request.POST or None)
         form.fields['hour_price'].initial = self.object.hour_price
         context['form_inside'] = form
         context['factory'] = self.object
+        context['products'] = Product.objects.all()
         return context    
 
       
@@ -598,12 +635,15 @@ def FactoryInSideCreate(request):
         hour_price = request.POST.get('hour_price')
         total_account = request.POST.get('total_account')
         
-        if factory_id and date and weight and product and product_weight and product_count and product_time and hour_count and hour_price and total_account:
+        if factory_id and date and product and product_weight and product_count and product_time and hour_count and hour_price and total_account:
 
             obj = FactoryInSide()
             obj.factory = factory
             obj.date = date
-            obj.weight = weight
+            if weight:
+                obj.weight = weight
+            else:
+                obj.weight = 0
             obj.color = color
             if wool_type:
                 obj.wool_type = wool_type
@@ -641,13 +681,12 @@ def FactoryInSideCreate(request):
 def FactoryInsideDelete(request):
     if request.is_ajax():
         inside_id = request.POST.get('inside_id')
-        obj =  FactoryInSide.objects.get(id=inside_id)
+        obj = FactoryInSide.objects.get(id=inside_id)
         obj.delete()
         
-        if obj:
-            response = {
-                'msg' : 'Send Successfully'
-            }
+        response = {
+            'msg': 'Send Successfully'
+        }
 
         return JsonResponse(response)    
         
