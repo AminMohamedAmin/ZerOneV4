@@ -456,10 +456,33 @@ class SellerDetails(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'عمليات استلام/تسليم مبالغ من/الي التاجر: ' + str(ProductSellers.objects.get(id=self.kwargs['pk']).name)
         context['type'] = 'list'
-        context['seller'] = ProductSellers.objects.get(id=int(self.kwargs['pk']))
-        context['from'] = SellerPayments.objects.filter(seller=int(self.kwargs['pk']), paid_value__gt=0, paid_type=1).aggregate(sum=Sum('paid_value'))
-        context['to'] = SellerPayments.objects.filter(seller=int(self.kwargs['pk']), paid_value__gt=0, paid_type=2).aggregate(sum=Sum('paid_value'))
-        context['count'] = SellerPayments.objects.filter(seller=self.kwargs['pk'], paid_value__gt=0).order_by('date').count()
+        seller = ProductSellers.objects.get(id=int(self.kwargs['pk']))
+        context['seller'] = seller
+        context['from'] = SellerPayments.objects.filter(seller=seller, paid_value__gt=0, paid_type=1).aggregate(sum=Sum('paid_value'))
+        context['to'] = SellerPayments.objects.filter(seller=seller, paid_value__gt=0, paid_type=2).aggregate(sum=Sum('paid_value'))
+        context['count'] = SellerPayments.objects.filter(seller=seller, paid_value__gt=0).order_by('date').count()
+
+        context['invoices'] = Invoice.objects.filter(seller=seller, invoice_type=1).order_by('-date')
+        context['invoices_sum'] = Invoice.objects.filter(seller=seller, invoice_type=1).order_by('-date').aggregate(sum=Sum(F('total') - F('discount'))).get('sum')
+        context['invoices_r_sum'] = Invoice.objects.filter(seller=seller, invoice_type=1).order_by('-date').aggregate(sum=Sum('return_value')).get('sum')
+        context['r_invoices'] = Invoice.objects.filter(seller=seller, invoice_type=2).order_by('-date')
+        context['r_invoices_sum'] = Invoice.objects.filter(seller=seller, invoice_type=2).order_by('-date').aggregate(sum=Sum(F('total') - F('discount'))).get('sum')
+
+        if context['invoices_sum']:
+            context['invoices_sum'] = context['invoices_sum']
+        else:
+            context['invoices_sum'] = 0.0
+
+        if context['invoices_r_sum']:
+            context['invoices_r_sum'] = context['invoices_r_sum']
+        else:
+            context['invoices_r_sum'] = 0.0
+
+        if context['r_invoices_sum']:
+            context['r_invoices_sum'] = context['r_invoices_sum']
+        else:
+            context['r_invoices_sum'] = 0.0
+
         return context
 
 
