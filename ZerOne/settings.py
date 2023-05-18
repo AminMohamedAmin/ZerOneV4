@@ -23,6 +23,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-as!gjsn87_y_!jp9*5j$^x1g)4h%nuy4uux!lb(1)9a8i5m)hl'
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "App_logs/app.log",
+            
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True,
+        },
+    },
+}
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
