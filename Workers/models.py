@@ -43,11 +43,13 @@ class WorkerAttendance(models.Model):
         return self.worker.name
     
 class WorkerPayment(models.Model):
+    created = models.DateTimeField(auto_now_add=True, verbose_name="تاريخ الاضافة")
     date = models.DateField(verbose_name="تاريخ السحب", default=django.utils.timezone.now())
     worker = models.ForeignKey(Worker, on_delete=models.CASCADE, verbose_name=" العامل") 
-    price = models.FloatField(verbose_name="المبلغ") 
+    price = models.FloatField(verbose_name="المبلغ")
+    description = models.CharField(max_length=250, verbose_name="وصف")
     admin = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="المسئول")
-    
+
     def __str__(self):
         return self.worker.name
 

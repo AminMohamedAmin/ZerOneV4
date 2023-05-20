@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="table-responsive scroll">
   <table
     class="table table-centered table-dark table-nowrap text-center"
   >
@@ -91,8 +91,8 @@
               </h5>
               <h3 class="mb-0 text-dark">
                 
-                {% if total_production %}
-                {{total_production}} قطعة
+                {% if production_total %}
+                {{production_total}} قطعة
                 {% else %}
                 0 قطعة
                 {% endif %}
@@ -124,8 +124,8 @@
               </h5>
               <h3 class="mb-0 text-dark">
                 
-                {% if total %}
-                  {{total}} جنية 
+                {% if production_cost %}
+                  {{production_cost|floatformat:2}} جنية
                 {% else %} 
                   0 جنية
                 {% endif %}
