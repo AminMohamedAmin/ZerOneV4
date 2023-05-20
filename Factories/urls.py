@@ -11,33 +11,23 @@ urlpatterns = [
     path('delete/<int:pk>', FactoryDelete.as_view(), name="FactoryDelete"),
     path('restore/<int:pk>', FactoryRestore.as_view(), name="FactoryRestore"),
     path('superDelete/<int:pk>', FactorySuperDelete.as_view(), name="FactorySuperDelete"),
-    path('detail/payment/<int:pk>', FactoryPayment.as_view(), name="FactoryPayment"),
+    path('all/print/<int:pk>/', PrintAll, name="PrintAll"),
+    path('get_product_weight_time/', get_product_weight_time, name="get_product_weight_time"),
+
     path('detail/payment/<int:pk>/div/', FactoryPayment_div.as_view(), name="FactoryPayment_div"),
-    
     path('payment/create/', FactoryPaymentCreate, name="FactoryPaymentCreate"),
     path('payment/delete/', FactoryPaymentDelete, name="FactoryPaymentDelete"),
-    path('payment/update/<int:pk>/', FactoryPaymentUpdate.as_view(), name="FactoryPaymentUpdate"),
-    path('payment/report/<int:pk>/', FactoryPaymentReport.as_view(), name="FactoryPaymentReport"),
-    path('payment/print/<int:pk>/', PrintPayment , name="PrintPayment"),
-    
-    
-    path('outside/<int:pk>', FactoryOutside.as_view(), name="FactoryOutside"),
+    path('payment/print/<int:pk>/', PrintPayment, name="PrintPayment"),
+
     path('outside/<int:pk>/div/', FactoryOutSide_div.as_view(), name="FactoryOutSide_div"),
-    path('outside/<int:pk>/update/', FactoryOutSideUpdate.as_view(), name="FactoryOutSideUpdate"),
-    path('outside/report/<int:pk>/', FactoryOutSideReport.as_view(), name="FactoryOutSideReport"),
-    path('outside/create/', FactoryOutSideCreate, name="FactoryOutSideCreate"),# url for create function using ajax
-    path('outside/delete/', FactoryOutsideDelete, name="FactoryOutsideDelete"), # url for delete function using ajax
-    path('outside/print/<int:pk>/', PrintOutside , name="PrintOutside"),
+    path('outside/create/', FactoryOutSideCreate, name="FactoryOutSideCreate"),
+    path('outside/delete/', FactoryOutsideDelete, name="FactoryOutsideDelete"),
+    path('outside/print/<int:pk>/', PrintOutside, name="PrintOutside"),
     
-    path('inside/<int:pk>', FactoryInside.as_view(), name="FactoryInside"),
     path('inside/<int:pk>/div/', FactoryInSide_div.as_view(), name="FactoryInSide_div"),
-    path('inside/<int:pk>/update/', FactoryInSideUpdate.as_view(), name="FactoryInSideUpdate"), 
-    path('inside/create/', FactoryInSideCreate, name="FactoryInSideCreate"),# url for create function using ajax
-    path('inside/delete/', FactoryInsideDelete, name="FactoryInsideDelete"), # url for delete function using ajax
-    path('inside/report/<int:pk>/', FactoryInSideReport.as_view(), name="FactoryInSideReport"),
-    path('inside/print/<int:pk>/', PrintInside , name="PrintInside"),
-    path('all/print/<int:pk>/', PrintAll , name="PrintAll"),
-    path('get_product_weight_time/', get_product_weight_time , name="get_product_weight_time"),
+    path('inside/create/', FactoryInSideCreate, name="FactoryInSideCreate"),
+    path('inside/delete/', FactoryInsideDelete, name="FactoryInsideDelete"),
+    path('inside/print/<int:pk>/', PrintInside, name="PrintInside"),
 
     ########################################################
 

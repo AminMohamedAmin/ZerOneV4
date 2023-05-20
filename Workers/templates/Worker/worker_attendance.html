@@ -1,52 +1,5 @@
 {% load crispy_forms_tags %}
-<style>
-  .expand_modal {
-    max-width: 100%;
-    margin: 0;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100vh;
-    display: flex;
-    position: fixed;
-    z-index: 100000;
-  }
-</style>
-
 <div class="card">
-  <div class="card-header">
-    <div class="card-title">
-      <b class="font-weight-bold text-center"> {{ title }}</b>
-        <span class="card-tools" style="float: left">
-      <button
-        type="button"
-        class="btn btn-tool"
-        data-card-widget="maximize"
-        onclick="
-            if (document.getElementById('expand_modal').value === '0'){
-                document.getElementById('expand_modal').value = 1;
-                document.getElementById('action_modal2').className = 'modal-dialog expand_modal';
-                document.getElementById('sub_modal2').className = 'modal-dialog modal-xl expand_modal';
-            }
-            else {
-                document.getElementById('expand_modal').value = 0;
-                document.getElementById('action_modal2').className = 'modal-dialog';
-                document.getElementById('sub_modal2').className = 'modal-dialog modal-xl';
-            }
-
-            "
-    >
-        <input type="number" value="0" id="expand_modal" hidden />
-        <i class="fas fa-expand"></i>
-      </button>
-      <button type="button" class="btn btn-tool" data-dismiss="modal">
-        <i class="fas fa-times"></i>
-      </button>
-    </span>
-    </div>
-  </div>
-
   <div class="row">
     <div class="col-lg-12">
       <div class="card">
@@ -55,36 +8,9 @@
           <div class="tab-pane" id="processing" role="tabpanel">
             <div class="row">
               <div class="col-lg-12">
-                <div class="bg-dark">
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <div class="p-3">
-                        <h3
-                          class="text-center font-weight-bold"
-                          style="color: white; margin-top: 10px"
-                        >
-                        <i class="fas fa-calendar-check"></i> {{title}}
-                        </h3>
-                      </div>
-                    </div>
-                    <div class="col-lg-6">
-                      <div class="p-3">
-                          <select class="form-control" id="all_hours" style="width: 100%; height: 100%">
-                              <option disabled>عرض ورديات معينة؟</option>
-                              <option value="" selected>كل الورديات</option>
-                              <option value="1">6 ساعات</option>
-                              <option value="2">8 ساعات</option>
-                              <option value="3">12 ساعة</option>
-                              <option value="4">18 ساعة</option>
-                          </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 {% if obj.deleted == 0 %}
                 <div class="table-responsive" id="order_list">
-                  <table class="table table-nowrap mb-0">
+                  <table class="table table-nowrap table-borderless">
                     <thead>
                       <form>
                         <tr>
@@ -92,31 +18,31 @@
                             class="col-lg-2 col-xl-2 col-md-1"
                             style="width: 20%"
                           >
-                            {{form.date|as_crispy_field}}
+                            {{attendance_form.date|as_crispy_field}}
                           </th>
                             <th
                             class="col-lg-2 col-xl-2 col-md-1"
                             style="width: 20%"
                           >
-                            {{form.day|as_crispy_field}}
+                            {{attendance_form.day|as_crispy_field}}
                           </th>
                           <th
                             class="col-lg-2 col-xl-2 col-md-1"
                             style="width: 30%"
                           >
-                            {{form.hour_count|as_crispy_field}}
+                            {{attendance_form.hour_count|as_crispy_field}}
                           </th>
                         
                           
                           <th class="col-lg-2 col-xl-2 col-md-2">
-                            <button
+                            <a
                               style="width: 100%"
                               onclick="attenCreate()"
                               class="btn btn-success"
                             >
                             <i class="fas fa-plus-circle"></i>
                               حضور
-                            </button>
+                            </a>
                           </th>
                          
                         </tr>
@@ -126,20 +52,20 @@
                 </div>
                 {% endif %}
                 <style>
-                  .table-responsive {
+                  /*.table-responsive {
                     max-height: 500px;
                   }
                   .table-responsive::-webkit-scrollbar {
                     display: none;
-                  }
+                  }*/
                 </style>
 
                 <div class="card-body" id="attendance">
-                  <div class="table-responsive">
+                  <div class="table-responsive scroll">
                     <table
                       class="table table-centered table-dark table-nowrap text-center"
                     >
-                      <thead style="background-color: #0c2b4b">
+                      <thead>
                         <tr>
                           <th>م</th>
                           <th>التاريخ</th>
@@ -211,7 +137,7 @@
                                   اجمالي الايام
                                 </h5>
                                 <h3 class="mb-0 text-dark">
-                                  {{summary.count_days}} يوم
+                                  {{attendance_summary.count_days}} يوم
                                 </h3>
                               </div>
 
@@ -236,9 +162,9 @@
                                   الحضور الفعلي
                                 </h5>
                                 <h3 class="mb-0 text-dark">
-                                  {{real_summary.real_days}} يوم
+                                  {{attendance_real_summary.real_days}} يوم
                                     و
-                                  {{real_summary.rest_hours}} ساعة
+                                  {{attendance_real_summary.rest_hours}} ساعة
                                 </h3>
                               </div>
 
@@ -263,7 +189,7 @@
                                   اجمالي الحساب المستحق
                                 </h5>
                                 <h3 class="mb-0 text-dark">
-                                  {{all_cost.sum_price|floatformat:2}} جنية
+                                  {{attendance_all_cost.sum_price|floatformat:2}} جنية
                                 </h3>
                               </div>
 
@@ -282,21 +208,21 @@
                     </div>
                   </div>
                 </div>
-
+                <script src="/static/assets/libs/jquery/jquery.min.js"></script>
                 <script>
                     $( document ).ready(function() {
                         const weekday = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
-                        const date = $('#date').val();
+                        const date = $('#date_att').val();
                         const d = new Date(date);
                         let day = weekday[d.getDay()];
-                        $('#day').val(day);
+                        $('#day_att').val(day);
                     });
-                    $('#date').on('keyup change', function (){
+                    $('#date_att').on('keyup change', function (){
                         const weekday = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
-                        const date = $('#date').val();
+                        const date = $('#date_att').val();
                         const d = new Date(date);
                         let day = weekday[d.getDay()];
-                        $('#day').val(day);
+                        $('#day_att').val(day);
                    });
                 </script>
 
@@ -313,8 +239,8 @@
                       url: "{% url 'Workers:WorkerAttendanceCreate'  %}",
                       data: {
                         id: "{{object.id}}",
-                        date: $("#date").val(),
-                        day: $("#day").val(),
+                        date: $("#date_att").val(),
+                        day: $("#day_att").val(),
                         hour_count: $("#hours_count").val(),
                         csrfmiddlewaretoken: "{{ csrf_token }}",
                         dataType: "json",
@@ -322,12 +248,10 @@
                       success: function (response) {
                         /* response message */
                         if (response.msg == 1) {
-                          $("#attendance")
-                            .html("&nbsp;")
-                            .load(
-                              "{% url 'Workers:WorkerAttendance_div' object.id %}"
-                            );
+                          $("#attendance").html("&nbsp;").load("{% url 'Workers:WorkerAttendance_div' object.id %}");
                           alert("تم الاضافة بنجاح");
+                          $("#paymnet").html("&nbsp;").load("{% url 'Workers:WorkerPayment_div' object.id %}");
+                          $("#production_worker").html("&nbsp;").load("{% url 'Workers:WorkerProductions_div' object.id %}");
                         } else {
                           alert("حاول مرة اخري / خطأ في البيانات");
                         }
@@ -354,18 +278,13 @@
                             "{% url 'Workers:WorkerAttendance_div' object.id %}"
                           );
                         alert("تم الحذف بنجاح");
+                        $("#paymnet").html("&nbsp;").load("{% url 'Workers:WorkerPayment_div' object.id %}");
+                        $("#production_worker").html("&nbsp;").load("{% url 'Workers:WorkerProductions_div' object.id %}");
                       },
 
                       failure: function () {},
                     });
                   }
-                </script>
-
-                <script>
-                    $( '#all_hours' ).change( function() {
-                        hour_id = this.value;
-                        $( '#attendance' ).html( '&nbsp;' ).load( "{% url 'Workers:WorkerAttendance_Hour' worker_id %}?hour_id=" + hour_id );
-                    });
                 </script>
               </div>
             </div>

@@ -24,6 +24,5 @@ urlpatterns = [
     path('seller_restore/<int:pk>', SellerRestore.as_view(), name="SellerRestore"),
     path('seller_superDelete/<int:pk>', SellerSuperDelete.as_view(), name="SellerSuperDelete"),
     path('seller_details/<int:pk>', SellerDetails.as_view(), name="SellerDetails"),
-    path('seller_invoices/<int:pk>', SellerInvoices.as_view(), name="SellerInvoices"),
     path('seller_print/<int:pk>', PrintSellerInvoicesDetails, name="PrintSellerInvoicesDetails"),
 ]

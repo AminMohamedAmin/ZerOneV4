@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="table-responsive scroll">
   <table
     class="table table-centered table-dark table-nowrap text-center"
   >
@@ -74,7 +74,7 @@
                 اجمالي الايام
               </h5>
               <h3 class="mb-0 text-dark">
-                {{summary.count_days}} يوم
+                {{attendance_summary.count_days}} يوم
               </h3>
             </div>
 
@@ -99,9 +99,9 @@
                                   الحضور الفعلي
                                 </h5>
                                 <h3 class="mb-0 text-dark">
-                                    {{real_summary.real_days}} يوم
+                                    {{attendance_real_summary.real_days}} يوم
                                     و
-                                  {{real_summary.rest_hours}} ساعة
+                                  {{attendance_real_summary.rest_hours}} ساعة
                                 </h3>
                               </div>
 
@@ -126,7 +126,7 @@
                 اجمالي الحساب المستحق
               </h5>
               <h3 class="mb-0 text-dark">
-                {{all_cost.sum_price|floatformat:2}} جنية
+                {{attendance_all_cost.sum_price|floatformat:2}} جنية
               </h3>
             </div>
 

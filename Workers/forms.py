@@ -25,14 +25,14 @@ class WorkerDeleteForm(forms.ModelForm):
         
 class WorkerPaymentForm(forms.ModelForm):
     class Meta:
-        fields = ['date', 'price', 'worker']
+        fields = ['date', 'price', 'worker', 'description']
         model = WorkerPayment
         widgets = {
             'date' : forms.DateInput(attrs={'type':'date', 'class':'form-control',
             'placeholder':'تاريخ السحب...', 'id':'date'}),
             'price' : forms.NumberInput(attrs={ 'class':'form-control',
             'placeholder':'المبلغ...', 'id':'price'}),
-            # 'admin' : forms.Select(attrs={'class':'form-control',  'placeholder':'المستلم...','id':'recipient', 'id':'admin'}),
+            'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'وصف...', 'id': 'description'}),
         }
         
 class WorkerPaymentReportForm(forms.Form):
@@ -61,9 +61,9 @@ class WorkerAttendanceForm(forms.ModelForm):
         model = WorkerAttendance
         widgets = {
             'date' :  forms.DateInput(attrs={'type':'date', 'class':'form-control',
-            'placeholder':'تاريخ السحب...', 'id':'date'}),
+            'placeholder':'تاريخ السحب...', 'id':'date_att'}),
             'day': forms.TextInput(attrs={'class': 'form-control',
-                                           'placeholder': 'اليوم...', 'id': 'day', 'readonly':'readonly'}),
+                                           'placeholder': 'اليوم...', 'id': 'day_att', 'readonly':'readonly'}),
             'hour_count' : forms.Select(attrs={'class':'form-control',
             'placeholder':'عدد الساعات...', 'id':'hours_count'}),
         }
@@ -78,7 +78,7 @@ class WorkerProductionForm(forms.ModelForm):
             'date' : forms.DateInput(attrs={'type':'date', 'class':'form-control',
             'placeholder':'تاريخ الاستلام', 'id':'production_date'}),
             'day': forms.DateInput(attrs={'class': 'form-control',
-                                           'placeholder': 'اليوم', 'id': 'production_day', 'readonly':'readonly'}),
+                                           'placeholder': 'اليوم...', 'id': 'production_day', 'readonly':'readonly'}),
             'quantity' : forms.NumberInput(attrs={ 'class':'form-control', 'placeholder':'الكمية...',
             'id':'worker_quantity'}),
             'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'السعر...',

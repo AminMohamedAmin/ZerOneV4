@@ -1,5 +1,5 @@
 {% load mathfilters %}
-<div class="table-responsive">
+<div class="table-responsive scroll">
   <table
     class="table table-centered table-dark table-nowrap text-center"
   >
@@ -71,8 +71,8 @@
                 اجمالي الحساب المستحق
               </h5>
               <h3 class="mb-0 text-dark">
-                  {% if all_cost.sum_price %}
-                    {{all_cost.sum_price}} جنية
+                  {% if payment_all_cost.sum_price %}
+                    {{payment_all_cost.sum_price|floatformat:2}} جنية
                     {% else %}
                     0.0
                     {% endif %}
@@ -100,7 +100,7 @@
               </h5>
               <h3 class="mb-0 text-dark">
                   {% if payment_sum %}
-                  {{payment_sum}}
+                  {{payment_sum|floatformat:2}}
                     {% else %}
                     0.0
                     {% endif %}
@@ -128,8 +128,8 @@
                   الباقي للعامل
               </h5>
               <h3 class="mb-0 text-dark">
-                  {% if all_cost.sum_price %}
-                  {{all_cost.sum_price|sub:payment_sum}}
+                  {% if payment_all_cost.sum_price %}
+                  {{payment_all_cost.sum_price|sub:payment_sum|floatformat:2}}
                     {% else %}
                     0.0
                     {% endif %}

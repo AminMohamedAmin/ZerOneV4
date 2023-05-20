@@ -227,6 +227,65 @@ class ProductSuperDelete(LoginRequiredMixin, UpdateView):
         return redirect(self.get_success_url())
 
 
+class ProductDetails(LoginRequiredMixin, ListView):
+    login_url = '/auth/login/'
+    model = Invoice
+    template_name = 'Products/product_detail.html'
+
+    def get_context_data(self, **kwargs):
+        product = Product.objects.get(id=int(self.kwargs['pk']))
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'إنتاج ومبيعات الموديل: ' + str(product.name)
+        context['type'] = 'list'
+        context['factory_in'] = FactoryInSide.objects.filter(product=product).order_by('-date', '-id')
+        context['factory_in_sum'] = FactoryInSide.objects.filter(product=product).order_by('-date', '-id').aggregate(sum=Sum('product_count')).get('sum')
+
+        context['invoices'] = InvoiceItem.objects.filter(item=product, invoice__invoice_type__in=[1, 3], invoice__saved=True).order_by('-date', '-id')
+        context['invoices_sum'] = InvoiceItem.objects.filter(item=product, invoice__invoice_type__in=[1, 3], invoice__saved=True).order_by('-date', '-id').aggregate(sum=Sum(F('quantity') * F('unit'))).get('sum')
+        context['r_invoices'] = InvoiceItem.objects.filter(item=product, invoice__invoice_type=2, invoice__saved=True).order_by('-date', '-id')
+        context['r_invoices_sum'] = InvoiceItem.objects.filter(item=product, invoice__invoice_type=2, invoice__saved=True).order_by('-date', '-id').aggregate(sum=Sum(F('quantity') * F('unit'))).get('sum')
+
+        context['supplier'] = SupplierQuantity.objects.filter(product=product, supplier__type=1).order_by('-date', '-id')
+        context['supplier_sum'] = SupplierQuantity.objects.filter(product=product, supplier__type=1).order_by('-date', '-id').aggregate(sum=Sum('product_count')).get('sum')
+        context['importer'] = SupplierQuantity.objects.filter(product=product, supplier__type=2).order_by('-date', '-id')
+        context['importer_sum'] = SupplierQuantity.objects.filter(product=product, supplier__type=2).order_by('-date', '-id').aggregate(sum=Sum('product_count')).get('sum')
+
+        if context['factory_in_sum']:
+            context['factory_in_sum'] = context['factory_in_sum']
+        else:
+            context['factory_in_sum'] = 0
+
+        if context['invoices_sum']:
+            context['invoices_sum'] = context['invoices_sum']
+        else:
+            context['invoices_sum'] = 0
+
+        if context['r_invoices_sum']:
+            context['r_invoices_sum'] = context['r_invoices_sum']
+        else:
+            context['r_invoices_sum'] = 0
+
+        if context['supplier_sum']:
+            context['supplier_sum'] = context['supplier_sum']
+        else:
+            context['supplier_sum'] = 0
+
+        if context['importer_sum']:
+            context['importer_sum'] = context['importer_sum']
+        else:
+            context['importer_sum'] = 0
+
+        if product.quantity:
+            product_quantity = product.quantity
+        else:
+            product_quantity = 0
+
+        context['total'] = context['factory_in_sum'] + product_quantity - (context['invoices_sum'] - context['r_invoices_sum']) - (context['importer_sum'] - context['supplier_sum'])
+
+        context['product'] = product
+        return context
+
+
 ###################################################################
 
 
@@ -486,46 +545,6 @@ class SellerDetails(LoginRequiredMixin, ListView):
         return context
 
 
-class SellerInvoices(LoginRequiredMixin, ListView):
-    login_url = '/auth/login/'
-    model = Invoice
-    template_name = 'Products/productsellers_invoice.html'
-    # paginate_by = 5
-
-    # def get_queryset(self):
-    #     queryset = Invoice.objects.filter(seller=self.kwargs['pk']).order_by('-date')
-    #     return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'فواتير التاجر: ' + str(ProductSellers.objects.get(id=self.kwargs['pk']).name)
-        context['type'] = 'list'
-
-        context['invoices'] = Invoice.objects.filter(seller=self.kwargs['pk'], invoice_type=1).order_by('-date')
-        context['invoices_sum'] = Invoice.objects.filter(seller=self.kwargs['pk'], invoice_type=1).order_by('-date').aggregate(sum=Sum(F('total') - F('discount'))).get('sum')
-        context['invoices_r_sum'] = Invoice.objects.filter(seller=self.kwargs['pk'], invoice_type=1).order_by('-date').aggregate(sum=Sum('return_value')).get('sum')
-        context['r_invoices'] = Invoice.objects.filter(seller=self.kwargs['pk'], invoice_type=2).order_by('-date')
-        context['r_invoices_sum'] = Invoice.objects.filter(seller=self.kwargs['pk'], invoice_type=2).order_by('-date').aggregate(sum=Sum(F('total') - F('discount'))).get('sum')
-
-        if context['invoices_sum']:
-            context['invoices_sum'] = context['invoices_sum']
-        else:
-            context['invoices_sum'] = 0.0
-
-        if context['invoices_r_sum']:
-            context['invoices_r_sum'] = context['invoices_r_sum']
-        else:
-            context['invoices_r_sum'] = 0.0
-
-        if context['r_invoices_sum']:
-            context['r_invoices_sum'] = context['r_invoices_sum']
-        else:
-            context['r_invoices_sum'] = 0.0
-
-        context['seller'] = ProductSellers.objects.get(id=int(self.kwargs['pk']))
-        return context
-
-
 def PrintSellerInvoicesDetails(request, pk):
     seller = ProductSellers.objects.get(id=pk)
     system_info = SystemInformation.objects.all()
@@ -600,62 +619,3 @@ def PrintSellerInvoicesDetails(request, pk):
     pdf = html.write_pdf(stylesheets=[weasyprint.CSS('static/assets/css/invoice_pdf.css')], presentational_hints=True)
     response = HttpResponse(pdf, content_type='application/pdf')
     return response
-
-
-class ProductDetails(LoginRequiredMixin, ListView):
-    login_url = '/auth/login/'
-    model = Invoice
-    template_name = 'Products/product_detail.html'
-
-    def get_context_data(self, **kwargs):
-        product = Product.objects.get(id=int(self.kwargs['pk']))
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'إنتاج ومبيعات الموديل: ' + str(product.name)
-        context['type'] = 'list'
-        context['factory_in'] = FactoryInSide.objects.filter(product=product).order_by('-date', '-id')
-        context['factory_in_sum'] = FactoryInSide.objects.filter(product=product).order_by('-date', '-id').aggregate(sum=Sum('product_count')).get('sum')
-
-        context['invoices'] = InvoiceItem.objects.filter(item=product, invoice__invoice_type__in=[1, 3], invoice__saved=True).order_by('-date', '-id')
-        context['invoices_sum'] = InvoiceItem.objects.filter(item=product, invoice__invoice_type__in=[1, 3], invoice__saved=True).order_by('-date', '-id').aggregate(sum=Sum(F('quantity') * F('unit'))).get('sum')
-        context['r_invoices'] = InvoiceItem.objects.filter(item=product, invoice__invoice_type=2, invoice__saved=True).order_by('-date', '-id')
-        context['r_invoices_sum'] = InvoiceItem.objects.filter(item=product, invoice__invoice_type=2, invoice__saved=True).order_by('-date', '-id').aggregate(sum=Sum(F('quantity') * F('unit'))).get('sum')
-
-        context['supplier'] = SupplierQuantity.objects.filter(product=product, supplier__type=1).order_by('-date', '-id')
-        context['supplier_sum'] = SupplierQuantity.objects.filter(product=product, supplier__type=1).order_by('-date', '-id').aggregate(sum=Sum('product_count')).get('sum')
-        context['importer'] = SupplierQuantity.objects.filter(product=product, supplier__type=2).order_by('-date', '-id')
-        context['importer_sum'] = SupplierQuantity.objects.filter(product=product, supplier__type=2).order_by('-date', '-id').aggregate(sum=Sum('product_count')).get('sum')
-
-        if context['factory_in_sum']:
-            context['factory_in_sum'] = context['factory_in_sum']
-        else:
-            context['factory_in_sum'] = 0
-
-        if context['invoices_sum']:
-            context['invoices_sum'] = context['invoices_sum']
-        else:
-            context['invoices_sum'] = 0
-
-        if context['r_invoices_sum']:
-            context['r_invoices_sum'] = context['r_invoices_sum']
-        else:
-            context['r_invoices_sum'] = 0
-
-        if context['supplier_sum']:
-            context['supplier_sum'] = context['supplier_sum']
-        else:
-            context['supplier_sum'] = 0
-
-        if context['importer_sum']:
-            context['importer_sum'] = context['importer_sum']
-        else:
-            context['importer_sum'] = 0
-
-        if product.quantity:
-            product_quantity = product.quantity
-        else:
-            product_quantity = 0
-
-        context['total'] = context['factory_in_sum'] + product_quantity - (context['invoices_sum'] - context['r_invoices_sum']) - (context['importer_sum'] - context['supplier_sum'])
-
-        context['product'] = product
-        return context
