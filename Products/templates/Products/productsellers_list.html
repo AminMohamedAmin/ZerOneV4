@@ -131,7 +131,7 @@
                                     </div>
 
                                     <div class="text-center">
-                                        <h3 class="mb-3 text-truncate"><a href="#" class="text-dark">{{x.name}}</a></h3>
+                                        <h3 class="mb-3 text-truncate"><a href="{% url 'Products:SellerDetails' x.id %}" class="text-dark">{{x.name}}</a></h3>
                                         <ul class="list-inline mb-0">
                                             <li class="list-inline-item mr-1"><h5 class="my-0"><span class="text-muted mr-1">الهاتف:</span> <b>{{x.phone}}</b></h5></li><br>
                                             <li class="list-inline-item mr-1"><h5 {% if sellers_debit_val < 0 %} class="my-0 text-danger" {% else %} class="my-0 text-success" {% endif %}><span class="text-muted mr-1">
@@ -160,7 +160,7 @@
 
                                             <div class="mr-3">
                                                <a href="{% url 'Products:PrintSellerInvoicesDetails' x.id %}" target="_blank" data-placement="top" title="" data-original-title="Message">
-                                                   <span class="badge badge-secondary"><i class='bx bx-list-ul' ></i>كشف تفصيلي</span>
+                                                   <span class="badge badge-secondary"><i class='bx bx-list-ul' ></i>كشف حساب</span>
                                               </a>
                                            </div>
                                         </div>

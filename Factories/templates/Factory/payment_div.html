@@ -47,7 +47,14 @@
                     <div class="d-flex flex-wrap">
                         <div class="mr-3">
                             <h5 class=" mb-2 text-light"> الحساب المستحق</h5>
-                            <h5 class="mb-0 text-dark">{{total_account}} جنية</h5>
+                            <h5 class="mb-0 text-dark">
+                                {% if total_account %}
+                                {{total_account}}
+                                {% else %}
+                                0.0
+                                {% endif %}
+                                جنية
+                            </h5>
                         </div>
 
 
@@ -68,7 +75,14 @@
                     <div class="d-flex flex-wrap">
                         <div class="">
                             <h5 class=" mb-2 text-light">اجمالي المسحوبات</h5>
-                            <h5 class="mb-0 text-dark">{{payment_sum}} جنية</h5>
+                            <h5 class="mb-0 text-dark">
+                                {% if payment_sum %}
+                                {{payment_sum}}
+                                {% else %}
+                                0.0
+                                {% endif %}
+                                جنية
+                            </h5>
                         </div>
 
 
@@ -89,7 +103,14 @@
                     <div class="d-flex flex-wrap">
                         <div class="">
                             <h5 class=" mb-2 text-light">باقي الحساب</h5>
-                            <h5 class="mb-0 text-dark">{{total}} جنية</h5>
+                            <h5 class="mb-0 text-dark">
+                                {% if total %}
+                                {{total}}
+                                {% else %}
+                                0.0
+                                {% endif %}
+                                جنية
+                            </h5>
                         </div>
 
 

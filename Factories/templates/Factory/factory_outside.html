@@ -289,7 +289,8 @@
                                             /* response message */
                                             $('#outside').html('&nbsp;').load("{% url 'Factories:FactoryOutSide_div' object.id %}");
                                             alert("تم الحذف بنجاح");
-
+                                            $( '#inside' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryInSide_div' object.id %}");
+                                            $("#paymnet").html("&nbsp;").load("{% url 'Factories:FactoryPayment_div' object.id %}");
                                         },
 
                                         failure: function () {
