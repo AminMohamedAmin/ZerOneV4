@@ -8,6 +8,7 @@ from Core.forms import SystemInfoForm
 from Core.models import SystemInformation
 from Products.models import *
 from Factories.models import Factory, Supplier
+from Treasury.models import Treasury
 from Workers.models import Worker
 from Invoices.models import Invoice
 from Core.models import *
@@ -271,4 +272,24 @@ class ClientInvoiceSearch(LoginRequiredMixin, ListView):
         else:
             messages.error(self.request, "خطأ! لايوجد فواتير لهذا العميل ", extra_tags="danger")
             queryset = self.model.objects.filter(deleted=False, invoice_type=int(self.kwargs['type']))
+        return queryset
+    
+
+class TreasurySearch(LoginRequiredMixin, ListView):
+    login_url = '/auth/login/'
+    model = Treasury
+    template_name = 'Treasury/treasury_list.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['message'] = 'active'
+        context['page'] = 'active'
+        context['treasury_serach_val'] = self.request.GET.get("treasury")
+        context['type'] = 'list'
+        context['count'] = self.model.objects.filter(deleted=False).count()
+        return context
+    
+    def get_queryset(self):
+        treasury_serach = self.request.GET.get("treasury")  
+        queryset = self.model.objects.filter(treasury_name__icontains=treasury_serach, deleted=False)
         return queryset

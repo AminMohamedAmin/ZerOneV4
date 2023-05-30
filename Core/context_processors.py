@@ -2,6 +2,7 @@ from Core.models import SystemInformation
 from Factories.models import Factory, Supplier
 from Invoices.models import *
 from django.db.models import F
+from Treasury.models import Treasury
 from Workers.models import Worker
 from Core.models import *
 
@@ -9,6 +10,7 @@ from Core.models import *
 def allcontext(request):
     info = SystemInformation.objects.filter(id=1)
     factorys = Factory.objects.filter(deleted=False)
+    treasurys = Treasury.objects.filter(deleted=False)
     products = Product.objects.filter(deleted=False)
     sellers = ProductSellers.objects.filter(deleted=False)
     allsellers = ProductSellers.objects.all()
@@ -30,6 +32,7 @@ def allcontext(request):
         'sellers':sellers,
         'allsellers':allsellers,
         'workers':workers,
+        'treasurys':treasurys,
         'invoices_notify':invoices_notify,
         'products_notify':products_notify,
         'notification_count':notification_count,
