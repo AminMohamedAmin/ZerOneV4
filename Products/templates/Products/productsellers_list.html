@@ -142,9 +142,9 @@
                                                 {% endif %}
                                             </span> <b>$
                                                 {% if sellers_debit_val < 0 %}
-                                                {{sellers_debit_val|mul:-1}}
+                                                {{sellers_debit_val|mul:-1|floatformat:2}}
                                                 {% else %}
-                                                {{sellers_debit_val}}
+                                                {{sellers_debit_val|floatformat:2}}
                                                 {% endif %}
                                             </b></h5></li>
                                         </ul>

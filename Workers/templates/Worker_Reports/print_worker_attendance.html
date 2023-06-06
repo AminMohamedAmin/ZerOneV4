@@ -9,56 +9,58 @@
   <body>
     <h1 style="margin-top: -100px">
       {% if system_info.logo %}
-       <img src={{system_info.logo.url}} width="150px" height="150px">
+       <img src={{system_info.logo.url}} height="100px" width="100px">
        {% else %}
-       <img src="/static/assets/images/new.png" width="150px" height="150px">
+       <img src="/static/assets/images/new.png" height="100px" width="100px">
       {% endif %}
     </h1>
 
     <dl id="informations" style="margin-top: -100px">
         <h2 class="text-center">{{system_info.name}}</h2>
-        <h5><span> {{date|date:'Y-m-d'}} </span>تاريخ التقرير: </h5>
-      <h5><span> {{worker.name}} </span>حضور العامل: </h5>
-    </dl>
+        <h5 style="margin-top: -15px"><span> {{date|date:'Y-m-d'}} </span>تاريخ التقرير: </h5>
+        <h5 style="margin-top: -15px"><span> {{worker.name}} </span>حضور العامل: </h5>
+    </dl><hr>
+
+    {% if from_date or to_date %}
+    <h5 style="text-align: center; text-decoration: underline">
+        فلترة: من
+        {% if from_date %}
+        {{ from_date }}
+        {% else %}
+        البداية
+        {% endif %}
+        الي
+        {% if to_date %}
+        {{ to_date }}
+        {% else %}
+        الآن
+        {% endif %}
+    </h5>
+    {% endif %}
 
     <table>
       <thead>
         <tr>
-          <th>عدد الساعات</th>
-          <th>اليوم</th>
-          <th>التاريخ</th>
+          <td>عدد الساعات</td>
+          <td>اليوم</td>
+          <td>التاريخ</td>
         </tr>
       </thead>
       <tbody>
         {% for x in queryset %}
           <tr>
-            <td>{{x.get_hour_count_display}} ساعة</td>
-            <td>{{x.day}}</td>
-            <td>{{x.date|date:'Y-m-d'}}</td>
+            <th>{{x.get_hour_count_display}}</th>
+            <th>{{x.day}}</th>
+            <th>{{x.date|date:'Y-m-d'}}</th>
           </tr>
         {% endfor %}
-        
-        
-      </tbody>
-    </table>
-
-    <table id="total">
-      <thead>
         <tr>
-          <th>اجمالي الايام</th>
-          <th>الي تاريخ</th>
-          <th>من تاريخ</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr>
             <td>
                 {{real_days}} يوم
                 و
               {{rest_hours}} ساعة
             </td>
-            <td>{{to_date}}</td>
-          <td>{{from_date}}</td>
+            <td colspan="2">إجماليات</td>
         </tr>
       </tbody>
     </table>

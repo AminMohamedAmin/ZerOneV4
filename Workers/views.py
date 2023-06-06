@@ -1,5 +1,5 @@
 import datetime
-from django.db.models.aggregates import Sum
+from django.db.models.aggregates import Sum, Count
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
@@ -41,6 +41,17 @@ class WorkerDetails(LoginRequiredMixin, DetailView):
 
     def get_count_days(self):
         atta = WorkerAttendance.objects.filter(worker=self.object).order_by('-date', '-id')
+        if atta != None:
+            count_days = atta.count()
+        else:
+            count_days = 0
+        total = {
+            'count_days': count_days
+        }
+        return total
+
+    def get_absent_days(self):
+        atta = WorkerAttendance.objects.filter(worker=self.object, attend=False, hour_count=5).order_by('-date', '-id')
         if atta != None:
             count_days = atta.count()
         else:
@@ -104,6 +115,7 @@ class WorkerDetails(LoginRequiredMixin, DetailView):
         attendance_queryset = WorkerAttendance.objects.filter(worker=self.object)
         context['workers'] = attendance_queryset.order_by('-date', '-id')
         context['attendance_summary'] = self.get_count_days()
+        context['absence_summary'] = self.get_absent_days()
         context['attendance_real_summary'] = self.get_real_count_days()
         context['attendance_all_cost'] = self.get_sum_salary()
 
@@ -117,13 +129,13 @@ class WorkerDetails(LoginRequiredMixin, DetailView):
         production_total = production_queryset.aggregate(quantity=Sum('quantity')).get('quantity')
         production_cost = production_queryset.aggregate(total=Sum('total')).get('total')
         if production_total:
-            context['production_total'] = "{:.1f}".format(production_total)
+            context['production_total'] = production_total
         else:
-            context['production_total'] = "{:.1f}".format(0)
+            context['production_total'] = 0
         if production_cost:
-            context['production_cost'] = "{:.1f}".format(production_cost)
+            context['production_cost'] = production_cost
         else:
-            context['production_cost'] = "{:.1f}".format(0)
+            context['production_cost'] = 0
         context['products'] = Product.objects.all()
 
         # payment
@@ -132,17 +144,17 @@ class WorkerDetails(LoginRequiredMixin, DetailView):
         context['payment'] = payment_queryset.order_by('-date', '-id')
         payment_sum = payment_queryset.aggregate(price=Sum('price')).get('price')
         if payment_sum:
-            context['payment_sum'] = "{:.1f}".format(payment_sum)
+            context['payment_sum'] = payment_sum
         else:
-            context['payment_sum'] = "{:.1f}".format(0)
+            context['payment_sum'] = 0
         if self.object.worker_type == 5:
             context['payment_all_cost'] = self.get_sum_salary()
         else:
             payment_total = production_queryset.aggregate(total=Sum('total')).get('total')
             if payment_total:
-                payment_total = "{:.1f}".format(payment_total)
+                payment_total = payment_total
             else:
-                payment_total = "{:.1f}".format(0)
+                payment_total = 0
             payment_cost = {
                 'sum_price': payment_total
             }
@@ -293,8 +305,12 @@ class WorkerAttendance_div(LoginRequiredMixin, DetailView):
     model = Worker
     template_name = 'Worker/worker_attendance_div.html'
 
-    def get_count_days(self):
+    def get_count_days(self, time_val, date_val):
         atta = WorkerAttendance.objects.filter(worker=self.object).order_by('-date', '-id')
+        if time_val:
+            atta = atta.filter(hour_count=int(time_val))
+        if date_val:
+            atta = atta.filter(date=date_val)
         if atta != None:
             count_days = atta.count()
         else:
@@ -304,8 +320,27 @@ class WorkerAttendance_div(LoginRequiredMixin, DetailView):
         }
         return total
 
-    def get_real_count_days(self):
+    def get_absent_days(self, time_val, date_val):
+        atta = WorkerAttendance.objects.filter(worker=self.object, attend=False, hour_count=5).order_by('-date', '-id')
+        if time_val:
+            atta = atta.filter(hour_count=int(time_val))
+        if date_val:
+            atta = atta.filter(date=date_val)
+        if atta != None:
+            count_days = atta.count()
+        else:
+            count_days = 0
+        total = {
+            'count_days': count_days
+        }
+        return total
+
+    def get_real_count_days(self, time_val, date_val):
         atta = WorkerAttendance.objects.filter(worker=self.object).order_by('-date', '-id')
+        if time_val:
+            atta = atta.filter(hour_count=int(time_val))
+        if date_val:
+            atta = atta.filter(date=date_val)
         if atta != None:
             val = 0
             for item in atta:
@@ -332,12 +367,12 @@ class WorkerAttendance_div(LoginRequiredMixin, DetailView):
         }
         return total
 
-    def get_sum_salary(self, **kwargs):
+    def get_sum_salary(self, time_val, date_val, **kwargs):
         worker = Worker.objects.get(id=self.object.id)
         worker_price = worker.day_cost
 
-        count_days = self.get_real_count_days()["real_days"]
-        count_hours = self.get_real_count_days()["rest_hours"] / 12
+        count_days = self.get_real_count_days(time_val, date_val)["real_days"]
+        count_hours = self.get_real_count_days(time_val, date_val)["rest_hours"] / 12
         sum_price = count_days * worker_price
         sum_price2 = count_hours * worker_price
         total = {
@@ -347,11 +382,18 @@ class WorkerAttendance_div(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         attendance_queryset = WorkerAttendance.objects.filter(worker=self.object)
+        time_val = self.request.GET.get('time_val')
+        date_val = self.request.GET.get('date_val')
+        if time_val:
+            attendance_queryset = attendance_queryset.filter(hour_count=int(time_val))
+        if date_val:
+            attendance_queryset = attendance_queryset.filter(date=date_val)
         context = super().get_context_data(**kwargs)
         context['workers'] = attendance_queryset.order_by('-date', '-id')
-        context['attendance_summary'] = self.get_count_days()
-        context['attendance_real_summary'] = self.get_real_count_days()
-        context['attendance_all_cost'] = self.get_sum_salary()
+        context['attendance_summary'] = self.get_count_days(time_val, date_val)
+        context['absence_summary'] = self.get_absent_days(time_val, date_val)
+        context['attendance_real_summary'] = self.get_real_count_days(time_val, date_val)
+        context['attendance_all_cost'] = self.get_sum_salary(time_val, date_val)
         context['type'] = 'list'
         context['obj'] = self.object
         context['worker_id'] = self.object.id
@@ -365,19 +407,26 @@ class Worker_Production_div(LoginRequiredMixin, DetailView):
     
     def get_context_data(self, **kwargs):
         production_queryset = WorkerProduction.objects.filter(worker=self.object)
+        product_id = self.request.GET.get('product_id')
+        date_val = self.request.GET.get('date_val')
+        if product_id:
+            product = Product.objects.get(id=int(product_id))
+            production_queryset = production_queryset.filter(product=product)
+        if date_val:
+            production_queryset = production_queryset.filter(date=date_val)
         context = super().get_context_data(**kwargs)
         context['production'] = production_queryset.order_by('-date', '-id')
         context['type'] = 'list'
         production_total = production_queryset.aggregate(quantity=Sum('quantity')).get('quantity')
         production_cost = production_queryset.aggregate(total=Sum('total')).get('total')
         if production_total:
-            context['production_total'] = "{:.1f}".format(production_total)
+            context['production_total'] = production_total
         else:
-            context['production_total'] = "{:.1f}".format(0)
+            context['production_total'] = 0
         if production_cost:
-            context['production_cost'] = "{:.1f}".format(production_cost)
+            context['production_cost'] = production_cost
         else:
-            context['production_cost'] = "{:.1f}".format(0)
+            context['production_cost'] = 0
         context['obj'] = self.object
         context['products'] = Product.objects.all()
         context['worker_id'] = self.object.id
@@ -432,21 +481,24 @@ class WorkerPayment_div(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         payment_queryset = WorkerPayment.objects.filter(worker=self.object).order_by('-id')
+        date_val = self.request.GET.get('date_val')
+        if date_val:
+            payment_queryset = payment_queryset.filter(date=date_val)
         context = super().get_context_data(**kwargs)
         context['payment'] = payment_queryset.order_by('-date', '-id')
         payment_sum = payment_queryset.aggregate(price=Sum('price')).get('price')
         if payment_sum:
-            context['payment_sum'] = "{:.1f}".format(payment_sum)
+            context['payment_sum'] = payment_sum
         else:
-            context['payment_sum'] = "{:.1f}".format(0)
+            context['payment_sum'] = 0
         if self.object.worker_type == 5:
             context['payment_all_cost'] = self.get_sum_salary()
         else:
-            payment_total = WorkerProduction.objects.aggregate(total=Sum('total')).get('total')
+            payment_total = WorkerProduction.objects.filter(worker=self.object).aggregate(total=Sum('total')).get('total')
             if payment_total:
-                payment_total = "{:.1f}".format(payment_total)
+                payment_total = payment_total
             else:
-                payment_total = "{:.1f}".format(0)
+                payment_total = 0
             payment_cost = {
                 'sum_price': payment_total
             }
@@ -460,17 +512,11 @@ class WorkerPayment_div(LoginRequiredMixin, DetailView):
 def WorkerAttendanceCreate(request):
     if request.is_ajax():
         worker_id = request.POST.get('id')
-
         worker = Worker.objects.get(id=worker_id)
-        print(worker)
-
         date = request.POST.get('date')
         day = request.POST.get('day')
-        print(day)
         hour_count = request.POST.get('hour_count')
-        print(hour_count)
         user = request.user
-        print(user)
 
         if date and day and hour_count:
             obj = WorkerAttendance()
@@ -478,7 +524,10 @@ def WorkerAttendanceCreate(request):
             obj.date = date
             obj.day = day
             obj.hour_count = hour_count
-            obj.attend = True
+            if int(hour_count) == 5:
+                obj.attend = False
+            else:
+                obj.attend = True
             obj.admin = user
             obj.save()
 
@@ -567,13 +616,15 @@ def WorkerPaymentCreate(request):
         # admin = request.POST.get('admin')
         # user = User.objects.get(id=admin)
         price = request.POST.get('price')
-        
+        description = request.POST.get('description')
+
         if worker_id and date and price:
             obj = WorkerPayment()
             obj.worker = worker
             obj.date = date
             obj.admin = request.user
             obj.price = price
+            obj.description = description
             obj.save()
             
             if obj:
@@ -669,12 +720,12 @@ def PrintWorkerproductions(request,pk):
         queryset = queryset.filter(date__gte = request.GET.get('from_date'))
     if request.GET.get('to_date'):
         queryset = queryset.filter(date__lte = request.GET.get('to_date'))
-    
-   
+
     context = {
         'queryset':queryset,
-        'total_productions':  queryset.aggregate(quantity=Sum('quantity')).get('quantity'),
-        'total_cost':  queryset.aggregate(total=Sum('total')).get('total'),
+        'total_productions': queryset.aggregate(quantity=Sum('quantity')).get('quantity'),
+        'total_cost': queryset.aggregate(total=Sum('total')).get('total'),
+        'models_count': queryset.aggregate(models=Count('product', distinct=True)).get('models'),
         'system_info':system_info,
         'date': datetime.now(),
         'user': request.user.username,

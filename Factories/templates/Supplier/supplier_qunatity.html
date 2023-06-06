@@ -210,13 +210,13 @@ table.dataTable thead .sorting_desc_disabled {
                                                                             {{x.product}}
                                                                         </td>
                                                                         <td>
-                                                                            {{x.product_count}}
+                                                                            {{x.product_count|floatformat:0}}
                                                                         </td>
                                                                         <td>
-                                                                            {{x.product_price}}
+                                                                            {{x.product_price|floatformat:2}}
                                                                         </td>
                                                                         <td>
-                                                                            {{ x.total_account }}
+                                                                            {{ x.total_account|floatformat:2 }}
                                                                         </td>
                                                                         {% if not supplier.deleted %}
                                                                         <td>
@@ -359,8 +359,8 @@ $(document).ready(function () {
                         return intVal(a) + intVal(b);
                     }, 0);
 
-                $(api.column(4).footer()).html('' + pageTotal + ' ( من ' + total + ' )');
-                $(api.column(2).footer()).html('' + pageTotal2 + ' ( من ' + total2 + ' )');
+                $(api.column(4).footer()).html('' + pageTotal.toFixed(2) + ' ( من ' + total.toFixed(2) + ' )');
+                $(api.column(2).footer()).html('' + pageTotal2.toFixed(0) + ' ( من ' + total2.toFixed(0) + ' )');
             },
 
             "columnDefs": [ {

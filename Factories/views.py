@@ -1,7 +1,7 @@
 import datetime
 import json
 
-from django.db.models.aggregates import Sum
+from django.db.models.aggregates import Sum, Count
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
@@ -60,9 +60,9 @@ class FactoryDetails(LoginRequiredMixin, DetailView):
         else:
             total_account = 0
         context['payment'] = queryset_payment.order_by('-date')
-        context['payment_sum'] = "{:.1f}".format(payment_sum)
-        context['total_account'] = "{:.1f}".format(total_account)
-        context['total'] = "{:.1f}".format(total_account - payment_sum)
+        context['payment_sum'] = payment_sum
+        context['total_account'] = total_account
+        context['total'] = total_account - payment_sum
         context['payment_form'] = FactoryPaymentForm(self.request.POST or None)
 
         # factory outside
@@ -70,14 +70,14 @@ class FactoryDetails(LoginRequiredMixin, DetailView):
         context['outSide'] = queryset_outside.order_by('-date')
         sum_weight = queryset_outside.aggregate(weight=Sum('weight')).get('weight')
         if sum_weight:
-            context['sum_weight'] = "{:.1f}".format(sum_weight)
+            context['sum_weight'] = sum_weight
         else:
-            context['sum_weight'] = "{:.1f}".format(0)
+            context['sum_weight'] = 0
         sum_weight_after = queryset_outside.aggregate(after=Sum('weight_after_loss')).get('after')
         if sum_weight_after:
-            context['sum_weight_after'] = "{:.1f}".format(sum_weight_after)
+            context['sum_weight_after'] = sum_weight_after
         else:
-            context['sum_weight_after'] = "{:.1f}".format(0)
+            context['sum_weight_after'] = 0
         outside_form = FactoryOutSideForm(self.request.POST or None)
         outside_form.fields['percent_loss'].initial = 0
         context['outside_form'] = outside_form
@@ -92,25 +92,37 @@ class FactoryDetails(LoginRequiredMixin, DetailView):
         context['form_inside'] = form_inside
         sum_outside = outSide.aggregate(out=Sum('weight_after_loss')).get('out')
         if sum_outside:
-            context['sum_outside'] = "{:.1f}".format(sum_outside)
+            context['sum_outside'] = sum_outside
         else:
-            context['sum_outside'] = "{:.1f}".format(0)
+            context['sum_outside'] = 0
         sum_weightt = queryset_inside.aggregate(weight=Sum('weight')).get('weight')
         if sum_weightt:
-            context['sum_weightt'] = "{:.1f}".format(sum_weightt)
+            context['sum_weightt'] = sum_weightt
         else:
-            context['sum_weightt'] = "{:.1f}".format(0)
+            context['sum_weightt'] = 0
         sum_weightt_after = queryset_inside.aggregate(after=Sum('total_account')).get('after')
         if sum_weightt_after:
-            context['sum_weightt_after'] = "{:.1f}".format(sum_weightt_after)
+            context['sum_weightt_after'] = sum_weightt_after
         else:
-            context['sum_weightt_after'] = "{:.1f}".format(0)
+            context['sum_weightt_after'] = 0
         products_count = queryset_inside.aggregate(product_count=Sum('product_count')).get('product_count')
         if products_count:
             context['products_count'] = int(products_count)
         else:
             context['products_count'] = 0
         context['products'] = Product.objects.all()
+
+        models_count = queryset_inside.aggregate(model_count=Count('product', distinct=True)).get('model_count')
+        if models_count:
+            context['models_count'] = int(models_count)
+        else:
+            context['models_count'] = 0
+
+        hours_count = queryset_inside.aggregate(hour_count=Sum('hour_count')).get('hour_count')
+        if hours_count:
+            context['hours_count'] = hours_count
+        else:
+            context['hours_count'] = 0
 
         # reports
         context['form'] = FactoryPaymentReportForm()
@@ -268,24 +280,24 @@ class FactoryInSide_div(LoginRequiredMixin, DetailView):
             queryset_inside = queryset_inside.filter(date=date_val)
         if wool_val:
             queryset_inside = queryset_inside.filter(wool_type=int(wool_val))
-        outSide = queryset_inside
+        outSide = FactoryOutSide.objects.filter(factory=self.object)
         context = super().get_context_data(**kwargs)
         context['inSide'] = queryset_inside.order_by('-date')
         sum_outside = outSide.aggregate(out=Sum('weight_after_loss')).get('out')
         if sum_outside:
-            context['sum_outside'] = "{:.1f}".format(sum_outside)
+            context['sum_outside'] = sum_outside
         else:
-            context['sum_outside'] = "{:.1f}".format(0)
+            context['sum_outside'] = 0
         sum_weightt = queryset_inside.aggregate(weight=Sum('weight')).get('weight')
         if sum_weightt:
-            context['sum_weightt'] = "{:.1f}".format(sum_weightt)
+            context['sum_weightt'] = sum_weightt
         else:
-            context['sum_weightt'] = "{:.1f}".format(0)
+            context['sum_weightt'] = 0
         sum_weightt_after = queryset_inside.aggregate(after=Sum('total_account')).get('after')
         if sum_weightt_after:
-            context['sum_weightt_after'] = "{:.1f}".format(sum_weightt_after)
+            context['sum_weightt_after'] = sum_weightt_after
         else:
-            context['sum_weightt_after'] = "{:.1f}".format(0)
+            context['sum_weightt_after'] = 0
         products_count = queryset_inside.aggregate(product_count=Sum('product_count')).get('product_count')
         if products_count:
             context['products_count'] = int(products_count)
@@ -294,6 +306,18 @@ class FactoryInSide_div(LoginRequiredMixin, DetailView):
         context['factory'] = self.object
         context['type'] = 'list'
         context['products'] = Product.objects.all()
+
+        models_count = queryset_inside.aggregate(model_count=Count('product', distinct=True)).get('model_count')
+        if models_count:
+            context['models_count'] = int(models_count)
+        else:
+            context['models_count'] = 0
+
+        hours_count = queryset_inside.aggregate(hour_count=Sum('hour_count')).get('hour_count')
+        if hours_count:
+            context['hours_count'] = hours_count
+        else:
+            context['hours_count'] = 0
         return context
 
 
@@ -314,14 +338,14 @@ class FactoryOutSide_div(LoginRequiredMixin, DetailView):
         context['outSide'] = queryset_outside.order_by('-date')
         sum_weight = queryset_outside.aggregate(weight=Sum('weight')).get('weight')
         if sum_weight:
-            context['sum_weight'] = "{:.1f}".format(sum_weight)
+            context['sum_weight'] = sum_weight
         else:
-            context['sum_weight'] = "{:.1f}".format(0)
+            context['sum_weight'] = 0
         sum_weight_after = queryset_outside.aggregate(after=Sum('weight_after_loss')).get('after')
         if sum_weight_after:
-            context['sum_weight_after'] = "{:.1f}".format(sum_weight_after)
+            context['sum_weight_after'] = sum_weight_after
         else:
-            context['sum_weight_after'] = "{:.1f}".format(0)
+            context['sum_weight_after'] = 0
         context['type'] = 'list'
         context['factory'] = self.object
         return context
@@ -349,9 +373,9 @@ class FactoryPayment_div(LoginRequiredMixin, DetailView):
             total_account = 0
         context = super().get_context_data(**kwargs)
         context['payment'] = queryset_payment.order_by('-date')
-        context['payment_sum'] = "{:.1f}".format(payment_sum)
-        context['total_account'] = "{:.1f}".format(total_account)
-        context['total'] = "{:.1f}".format(total_account - payment_sum)
+        context['payment_sum'] = payment_sum
+        context['total_account'] = total_account
+        context['total'] = total_account - payment_sum
         context['type'] = 'list'
         context['factory'] = self.object
         return context
@@ -538,13 +562,22 @@ def PrintInside(request, pk):
     if request.GET.get('to_date'):
         queryset = queryset.filter(date__lte=request.GET.get('to_date'))
 
-    weight = queryset.aggregate(weight=Sum('weight')).get('weight')
-    sum_weight = queryset.aggregate(out=Sum('total_account')).get('out')
-    # sum_weight = "{:.2f}".format(sum_weight)
-    # weight = "{:.3f}".format(weight)
+    if queryset:
+        weight = queryset.aggregate(weight=Sum('weight')).get('weight')
+        sum_weight = queryset.aggregate(out=Sum('total_account')).get('out')
+        sum_count = queryset.aggregate(count=Sum('product_count')).get('count')
+        sum_hours = queryset.aggregate(hour=Sum('hour_count')).get('hour')
+    else:
+        weight = 0
+        sum_weight = 0
+        sum_count = 0
+        sum_hours = 0
+
     context = {
         'queryset': queryset,
         'sum_weight': sum_weight,
+        'sum_count': sum_count,
+        'sum_hours': sum_hours,
         'weight': weight,
         'system_info': system_info,
         'date': datetime.now(),
@@ -574,10 +607,16 @@ def PrintOutside(request, pk):
     if request.GET.get('to_date'):
         queryset = queryset.filter(date__lte=request.GET.get('to_date'))
 
-    sum_weight = queryset.aggregate(out=Sum('weight_after_loss')).get('out')
-    # sum_weight = "{:.3f}".format(sum_weight)
+    if queryset:
+        sum_all_weight = queryset.aggregate(all=Sum('weight')).get('all')
+        sum_weight = queryset.aggregate(out=Sum('weight_after_loss')).get('out')
+    else:
+        sum_all_weight = 0
+        sum_weight = 0
+
     context = {
         'queryset': queryset,
+        'sum_all_weight': sum_all_weight,
         'sum_weight': sum_weight,
         'system_info': system_info,
         'date': datetime.now(),
@@ -603,15 +642,19 @@ def PrintPayment(request,pk):
             
     queryset = Payment.objects.filter(factory=pk).order_by('-date')
     if request.GET.get('from_date'):
-        queryset = queryset.filter(date__gte = request.GET.get('from_date'))
+        queryset = queryset.filter(date__gte=request.GET.get('from_date'))
     if request.GET.get('to_date'):
-        queryset = queryset.filter(date__lte = request.GET.get('to_date'))
-    
-   
+        queryset = queryset.filter(date__lte=request.GET.get('to_date'))
+
+    if queryset:
+        count_price = queryset.aggregate(price=Sum('price')).get('price')
+    else:
+        count_price = 0
+
     context = {
         'queryset':queryset,
-        'count_price':  queryset.aggregate(price=Sum('price')).get('price'),
-        'system_info':system_info,
+        'count_price': count_price,
+        'system_info': system_info,
         'date': datetime.now(),
         'user': request.user.username,
         'from_date': request.GET.get('from_date'),
@@ -637,9 +680,15 @@ def PrintAll(request, pk):
     if inside:
         sum_in_weight = inside.aggregate(weight=Sum('weight')).get('weight')
         sum_in_total = inside.aggregate(total=Sum('total_account')).get('total')
+        sum_product_count = inside.aggregate(count=Sum('product_count')).get('count')
+        sum_hours = inside.aggregate(hour=Sum('hour_count')).get('hour')
+        count_models = inside.aggregate(models=Count('product', distinct=True)).get('models')
     else:
         sum_in_weight = 0
         sum_in_total = 0
+        sum_product_count = 0
+        sum_hours = 0
+        count_models = 0
 
     outside = FactoryOutSide.objects.filter(factory=pk)
     if outside:
@@ -656,6 +705,9 @@ def PrintAll(request, pk):
     context = {
         'sum_in_weight': sum_in_weight,
         'sum_in_total': sum_in_total,
+        'sum_product_count': sum_product_count,
+        'sum_hours': sum_hours,
+        'count_models': count_models,
         'sum_out_weight': sum_out_weight,
         'sum_out_total': sum_out_total,
         'system_info': system_info,

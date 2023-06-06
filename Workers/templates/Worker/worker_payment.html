@@ -57,7 +57,19 @@
                   }*/
                 </style>
 
-                <div class="card-body" id="paymnet">
+                <div class="table-responsive">
+                    <table class="table table-centered table-dark table-nowrap text-center">
+                        <thead>
+                            <tr>
+                                <td style="width: 30%">
+                                    <input type="date" class="form-control" id="pay_specific_date" style="width: 100%" onchange="PayDateFilter(this)">
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div id="paymnet">
                   <div class="table-responsive scroll">
                     <table
                       class="table table-centered table-dark table-nowrap text-center"
@@ -67,6 +79,7 @@
                           <th>م</th>
                           <th>التاريخ</th>
                           <th>المبلغ</th>
+                          <th>وصف</th>
                           <th>المسئول</th>
                           <th><i class="fas fa-cogs"></i></th>
                         </tr>
@@ -83,7 +96,10 @@
                                 >
                                 </td>
                                 <td>
-                                <i class="fas fa-dollar-sign"></i> {{x.price}}
+                                <i class="fas fa-dollar-sign"></i> {{x.price|floatformat:2}}
+                                </td>
+                                <td>
+                                {{x.description}}
                                 </td>
                                 <td><i class="fas fa-user-tie"></i> {{x.admin}}</td>
                                 {% if request.user.is_superuser %}
@@ -133,7 +149,7 @@
                                       {% if payment_all_cost.sum_price %}
                                         {{payment_all_cost.sum_price|floatformat:2}} جنية
                                         {% else %}
-                                        0.0
+                                        0.00
                                         {% endif %}
                                   </h3>
                                 </div>
@@ -161,7 +177,7 @@
                                       {% if payment_sum %}
                                       {{payment_sum|floatformat:2}}
                                         {% else %}
-                                        0.0
+                                        0.00
                                         {% endif %}
                                         جنيه
                                   </h3>
@@ -187,10 +203,10 @@
                                       الباقي للعامل
                                   </h5>
                                   <h3 class="mb-0 text-dark">
-                                      {% if payment_all_cost.sum_price %}
+                                      {% if payment_all_cost.sum_price or payment_sum %}
                                       {{payment_all_cost.sum_price|sub:payment_sum|floatformat:2}}
                                         {% else %}
-                                        0.0
+                                        0.00
                                         {% endif %}
                                         جنيه
                                   </h3>
@@ -267,6 +283,18 @@
                       failure: function () {},
                     });
                   }
+                </script>
+                <script>
+                    function PayDateFilter(val) {
+                        if (val.value){
+                            val.style.backgroundColor = 'lightgreen';
+                        }
+                        else {
+                            val.style.backgroundColor = '';
+                        }
+                        date_val = val.value;
+                        $( '#paymnet' ).html( '&nbsp;' ).load( "{% url 'Workers:WorkerPayment_div' object.id %}?date_val=" + date_val );
+                    };
                 </script>
               </div>
             </div>

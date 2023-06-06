@@ -327,7 +327,7 @@ class SellerCreate(LoginRequiredMixin, CreateView):
     login_url = '/auth/login/'
     model = ProductSellers
     form_class = ProductSellerForm
-    template_name = 'forms/form_template.html'
+    template_name = 'forms/seller_product_form.html'
     success_url = reverse_lazy('Products:SellerList')
 
     def get_context_data(self, **kwargs):
@@ -350,7 +350,7 @@ class SellerUpdate(LoginRequiredMixin, UpdateView):
     login_url = '/auth/login/'
     model = ProductSellers
     form_class = ProductSellerFormUpdate
-    template_name = 'forms/form_template.html'
+    template_name = 'forms/seller_product_form.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -433,7 +433,7 @@ class SellerDelete(LoginRequiredMixin, UpdateView):
     login_url = '/auth/login/'
     model = ProductSellers
     form_class = ProductSellerDeleteForm
-    template_name = 'forms/form_template.html'
+    template_name = 'forms/seller_product_form.html'
 
     def get_success_url(self):
         return reverse('Products:SellerList')
@@ -457,7 +457,7 @@ class SellerRestore(LoginRequiredMixin, UpdateView):
     login_url = '/auth/login/'
     model = ProductSellers
     form_class = ProductSellerDeleteForm
-    template_name = 'forms/form_template.html'
+    template_name = 'forms/seller_product_form.html'
 
     def get_success_url(self):
         return reverse('Products:SellerList')
@@ -481,7 +481,7 @@ class SellerSuperDelete(LoginRequiredMixin, UpdateView):
     login_url = '/auth/login/'
     model = ProductSellers
     form_class = ProductSellerDeleteForm
-    template_name = 'forms/form_template.html'
+    template_name = 'forms/seller_product_form.html'
 
     def get_success_url(self):
         return reverse('Products:SellerTrashList')
@@ -553,6 +553,11 @@ def PrintSellerInvoicesDetails(request, pk):
     else:
         system_info = None
 
+    if seller:
+        initial_debit = seller.initial_balance_debit
+    else:
+        initial_debit = 0
+
     invoices = Invoice.objects.filter(seller=seller, invoice_type=1).order_by('-date')
     invoices_sum = invoices.aggregate(sum=Sum(F('total') - F('discount'))).get('sum')
     invoices_r_sum = invoices.aggregate(sum=Sum('return_value')).get('sum')
@@ -562,40 +567,63 @@ def PrintSellerInvoicesDetails(request, pk):
     if invoices_sum:
         invoices_sum = invoices_sum
     else:
-        invoices_sum = 0.0
+        invoices_sum = 0
 
     if invoices_r_sum:
         invoices_r_sum = invoices_r_sum
     else:
-        invoices_r_sum = 0.0
+        invoices_r_sum = 0
 
     if r_invoices_sum:
         r_invoices_sum = r_invoices_sum
     else:
-        r_invoices_sum = 0.0
+        r_invoices_sum = 0
+
+    invoices_overall = float(invoices_sum) - float(invoices_r_sum) - float(r_invoices_sum)
 
     seller_payments_from = SellerPayments.objects.filter(seller=seller, paid_type=1, paid_value__gt=0)
+    payments_from = seller_payments_from.aggregate(sum=Sum('paid_value')).get('sum')
     seller_payments_to = SellerPayments.objects.filter(seller=seller, paid_type=2, paid_value__gt=0)
-    if seller:
-        initial_debit = seller.initial_balance_debit
-    else:
-        initial_debit = 0
+    payments_to = seller_payments_to.aggregate(sum=Sum('paid_value')).get('sum')
 
-    if seller_payments_from:
-        payments_from = seller_payments_from.aggregate(sum=Sum('paid_value')).get('sum')
+    if payments_from:
+        payments_from = payments_from
     else:
         payments_from = 0
 
-    if seller_payments_to:
-        payments_to = seller_payments_to.aggregate(sum=Sum('paid_value')).get('sum')
+    if payments_to:
+        payments_to = payments_to
     else:
         payments_to = 0
 
-    payment_s = payments_from - payments_to
+    payment_s = float(payments_from) - float(payments_to)
+
+    # if seller.initial_balance_type == 1:
+    #     payment_sum = (float(payments_from) - float(payments_to)) + float(initial_debit)
+    # else:
+    #     payment_sum = (float(payments_from) - float(payments_to)) - float(initial_debit)
+
     if seller.initial_balance_type == 1:
-        payment_sum = (payments_from - payments_to) + initial_debit
+        payment_sum = (float(invoices_overall) - float(payments_from) + float(payments_to)) - float(initial_debit)
     else:
-        payment_sum = (payments_from - payments_to) - initial_debit
+        payment_sum = (float(invoices_overall) - float(payments_from) + float(payments_to)) + float(initial_debit)
+
+    invoices_items = InvoiceItem.objects.filter(invoice__seller=seller, invoice__invoice_type=1).order_by('-date')
+    invoices_items_sum = invoices_items.aggregate(sum=Sum(F('quantity') * F('unit'))).get('sum')
+    r_invoices_items = InvoiceItem.objects.filter(invoice__seller=seller, invoice__invoice_type=2).order_by('-date')
+    r_invoices_items_sum = r_invoices_items.aggregate(sum=Sum(F('quantity') * F('unit'))).get('sum')
+
+    if invoices_items_sum:
+        invoices_items_sum = int(invoices_items_sum)
+    else:
+        invoices_items_sum = 0
+
+    if r_invoices_items_sum:
+        r_invoices_items_sum = int(r_invoices_items_sum)
+    else:
+        r_invoices_items_sum = 0
+
+    all_invoices_items = invoices_items_sum - r_invoices_items_sum
 
     context = {
         'system_info': system_info,
@@ -613,6 +641,11 @@ def PrintSellerInvoicesDetails(request, pk):
         'payments_from': payments_from,
         'payments_to': payments_to,
         'payment_s': payment_s,
+        'invoices_overall': invoices_overall,
+        'initial_debit': initial_debit,
+        'invoices_items_sum': invoices_items_sum,
+        'r_invoices_items_sum': r_invoices_items_sum,
+        'all_invoices_items': all_invoices_items,
     }
     html_string = render_to_string('Products/print_seller_invoices_details.html', context)
     html = weasyprint.HTML(string=html_string, base_url=request.build_absolute_uri())

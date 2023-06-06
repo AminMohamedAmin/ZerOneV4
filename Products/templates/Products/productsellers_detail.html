@@ -227,7 +227,7 @@
                                                                 <td>
                                                                     <h5 class="badge badge-danger font-size-16">
                                                                         <i class="fas fa-dollar-sign"></i>
-                                                                        {{x.paid_value}}
+                                                                        {{x.paid_value|floatformat:2}}
                                                                     </h5>
                                                                 </td>
                                                               <td>
@@ -262,9 +262,9 @@
                                                     <p class="btn btn-block btn-warning">
                                                     قيمة افتتاحية:
                                                     {% if seller.initial_balance_debit %}
-                                                    {{ seller.initial_balance_debit }}
+                                                    {{ seller.initial_balance_debit|floatformat:2 }}
                                                     {% else %}
-                                                    0.0
+                                                    0.00
                                                     {% endif %}
                                                     جنيه
                                                     {% if seller.initial_balance_debit %}
@@ -280,9 +280,9 @@
                                                     <p class="btn btn-block btn-success">
                                                     التاجر دفع لك:
                                                     {% if from.sum %}
-                                                    {{ from.sum }}
+                                                    {{ from.sum|floatformat:2 }}
                                                     {% else %}
-                                                    0.0
+                                                    0.00
                                                     {% endif %}
                                                     جنيه
                                                     </p>
@@ -291,9 +291,9 @@
                                                     <p class="btn btn-block btn-danger">
                                                     أنت دفعت للتاجر:
                                                     {% if to.sum %}
-                                                    {{ to.sum }}
+                                                    {{ to.sum|floatformat:2 }}
                                                     {% else %}
-                                                    0.0
+                                                    0.00
                                                     {% endif %}
                                                     جنيه
                                                     </p>
@@ -348,25 +348,25 @@
                                                                 <td>
                                                                     <h5 class="badge badge-danger font-size-16">
                                                                         <i class="fas fa-dollar-sign"></i>
-                                                                        {{x.total}}
+                                                                        {{x.total|floatformat:2}}
                                                                     </h5>
                                                                 </td>
                                                                 <td>
                                                                     <h5 class="badge badge-danger font-size-16">
                                                                         <i class="fas fa-dollar-sign"></i>
-                                                                        {{x.discount}}
+                                                                        {{x.discount|floatformat:2}}
                                                                     </h5>
                                                                 </td>
                                                                 <td>
                                                                     <h5 class="badge badge-danger font-size-16">
                                                                         <i class="fas fa-dollar-sign"></i>
-                                                                        {{x.total|sub:x.discount}}
+                                                                        {{x.total|sub:x.discount|floatformat:2}}
                                                                     </h5>
                                                                 </td>
                                                                 <td>
                                                                     <h5 class="badge badge-danger font-size-16">
                                                                         <i class="fas fa-dollar-sign"></i>
-                                                                        {{x.return_value}}
+                                                                        {{x.return_value|floatformat:2}}
                                                                     </h5>
                                                                 </td>
                                                                 <td>
@@ -404,9 +404,9 @@
                                                     <p class="btn btn-block btn-success">
                                                     إجمالي قيمة المبيعات:
                                                     {% if invoices_sum %}
-                                                    {{ invoices_sum }}
+                                                    {{ invoices_sum|floatformat:2 }}
                                                     {% else %}
-                                                    0.0
+                                                    0.00
                                                     {% endif %}
                                                     جنيه
                                                     </p>
@@ -458,19 +458,19 @@
                                                                 <td>
                                                                     <h5 class="badge badge-danger font-size-16">
                                                                         <i class="fas fa-dollar-sign"></i>
-                                                                        {{x.total}}
+                                                                        {{x.total|floatformat:2}}
                                                                     </h5>
                                                                 </td>
                                                                 <td>
                                                                     <h5 class="badge badge-danger font-size-16">
                                                                         <i class="fas fa-dollar-sign"></i>
-                                                                        {{x.discount}}
+                                                                        {{x.discount|floatformat:2}}
                                                                     </h5>
                                                                 </td>
                                                                 <td>
                                                                     <h5 class="badge badge-danger font-size-16">
                                                                         <i class="fas fa-dollar-sign"></i>
-                                                                        {{x.total|sub:x.discount}}
+                                                                        {{x.total|sub:x.discount|floatformat:2}}
                                                                     </h5>
                                                                 </td>
                                                                 <td>
@@ -508,9 +508,9 @@
                                                     <p class="btn btn-block btn-danger">
                                                     إجمالي قيمة مرتجع المبيعات:
                                                     {% if r_invoices_sum or invoices_r_sum %}
-                                                    {{ r_invoices_sum|add:invoices_r_sum }}
+                                                    {{ r_invoices_sum|add:invoices_r_sum|floatformat:2 }}
                                                     {% else %}
-                                                    0.0
+                                                    0.00
                                                     {% endif %}
                                                     جنيه
                                                     </p>
