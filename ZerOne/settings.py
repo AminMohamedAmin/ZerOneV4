@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'Factories',
     'Workers',
     'Invoices',
+    'Treasury',
 ]
 
 # Add this to Abstruct user 

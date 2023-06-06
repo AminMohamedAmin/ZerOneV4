@@ -1,17 +1,4 @@
-<!--<style>
-    .expand_modal {
-        max-width: 100%;
-        margin: 0;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 100vh;
-        display: flex;
-        position: fixed;
-        z-index: 100000;
-    }
-</style>-->
+
 {% block main %}
     {% load bootstrap4 %}
     {% load  crispy_forms_tags %}
@@ -23,24 +10,6 @@
                         <div class="card-title">
                             <b class="font-weight-bold text-center"> {{ title }}</b>
                             <span class="card-tools" style="float: left">
-                            <!--<button type="button" class="btn btn-tool" data-card-widget="maximize"
-                            onclick="
-                            if (document.getElementById('expand_modal').value === '0'){
-                                document.getElementById('expand_modal').value = 1;
-                                document.getElementById('action_modal2').className = 'modal-dialog expand_modal';
-                                document.getElementById('sub_modal2').className = 'modal-dialog modal-lg expand_modal';
-                            }
-                            else {
-                                document.getElementById('expand_modal').value = 0;
-                                document.getElementById('action_modal2').className = 'modal-dialog';
-                                document.getElementById('sub_modal2').className = 'modal-dialog modal-lg';
-                            }
-
-                            "
-                            >
-                                <input type="number" value="0" id="expand_modal" hidden>
-                                <i class="fas fa-expand"></i>
-                            </button>-->
                             <button type="button" class="btn btn-tool" data-dismiss="modal">
                                 <i class="fas fa-times"></i>
                             </button>
@@ -50,13 +19,9 @@
                     <div class="card-body">
                         {% if message == 'delete' %}
                             {% csrf_token %}
-                           
-                            
-                                        {{form.deleted|as_crispy_field}}
-                                 
-
+                            {{form.deleted|as_crispy_field}}
                             <h5 class="font-weight-bold text-center">هل انت متأكد من نقل العنصر
-                                "{{ object.name }}"
+                                "{{ object.treasury_name }}"
                                 الي سلة المهملات
                                 ؟
                             </h5>
@@ -67,15 +32,15 @@
                        
                             
                             <h5 class="font-weight-bold text-center">هل انت متأكد من ارجاع العنصر
-                                "{{ object.name }}"
+                                "{{ object.treasury_name }}"
                                 الى القائمة النشطة مرة اخري
                                 ؟
                             </h5>
                         {% elif message == 'super_delete' %}
                             {% csrf_token %}
-
+                            
                             <h5 class="font-weight-bold text-center">هل انت متأكد من حذف العنصر
-                                "{{ object.name }}"
+                                "{{ object.treasury_name }}"
                                 بشكل نهائي
                                 ؟
                             </h5>
@@ -84,47 +49,19 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
-                                        {{form.start_date|as_crispy_field}}
+                                        {{form.operation_value|as_crispy_field}}
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        {{form.name|as_crispy_field}}
+                                        {{form.operation_description|as_crispy_field}}
                                      </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        {{form.hour_price|as_crispy_field}}
-                                    </div>
-                                </div>    
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        {{form.machine_type|as_crispy_field}}
-                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        {{form.machine_count|as_crispy_field}}
-                                    </div>
-                                </div>    
-                                <div class="col-5">
-                                    <div class="form-group">
-                                        {{form.phone|as_crispy_field}}
-                                     </div>
-                                </div>
-                                <div class="col-1">
-                                    <div class="form-group" style="margin-top: 20px">
-                                        {{form.active|as_crispy_field}}
-                                    </div>
-                                </div>
-
-                            </div>
-                            
+                          
+                           
                             <input name="url" type="hidden" class="url_input">
+                            <input name="treasury_pk" type="hidden" value="{{request.GET.treasury_id}}">
                             <input name="instance" type="hidden"  value="{{ request.user.instance.id }}">
                         {% endif %}
                     </div>

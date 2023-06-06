@@ -24,6 +24,7 @@ class Modules(models.Model):
     worker_active = models.BooleanField(default=True, verbose_name="تنشيط العمال ")
     invoice_active = models.BooleanField(default=True, verbose_name="تنشيط الفواتير ")
     supplier_active = models.BooleanField(default=True, verbose_name="تنشيط الموردين ")
+    treasury_active = models.BooleanField(default=True, verbose_name="تنشيط الخزائن")
     stop_date = models.DateField(null=True, blank=True, verbose_name="فترة تجريبية")
 
     def __str__(self):

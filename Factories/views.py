@@ -1,16 +1,13 @@
 import datetime
 import json
-
 from django.db.models.aggregates import Sum, Count
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import *
-
 from Core.models import SystemInformation
 from .forms import *
-
 from django.contrib import messages
 import weasyprint
 from django.template.loader import render_to_string
