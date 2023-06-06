@@ -2,7 +2,7 @@
 {% block main %}
     {% load bootstrap4 %}
     {% load  crispy_forms_tags %}
-    <form method="post" action="{{ action_url }}" enctype="multipart/form-data">
+    <form method="post" action="{{ action_url }}">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -19,13 +19,9 @@
                     <div class="card-body">
                         {% if message == 'delete' %}
                             {% csrf_token %}
-                           
-                            
-                                        {{form.deleted|as_crispy_field}}
-                                 
-
+                            {{form.deleted|as_crispy_field}}
                             <h5 class="font-weight-bold text-center">هل انت متأكد من نقل العنصر
-                                "{{ object.name }}"
+                                "{{ object.treasury_name }}"
                                 الي سلة المهملات
                                 ؟
                             </h5>
@@ -36,82 +32,46 @@
                        
                             
                             <h5 class="font-weight-bold text-center">هل انت متأكد من ارجاع العنصر
-                                "{{ object.name }}"
+                                "{{ object.treasury_name }}"
                                 الى القائمة النشطة مرة اخري
                                 ؟
                             </h5>
                         {% elif message == 'super_delete' %}
                             {% csrf_token %}
-                            
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        {{form.treasury_name|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        {{form.treasury_balance|as_crispy_field}}
+                                     </div>
+                                </div>
+                            </div>
+                           
                             <h5 class="font-weight-bold text-center">هل انت متأكد من حذف العنصر
-                                "{{ object.name }}"
+                                "{{ object.treasury_name }}"
                                 بشكل نهائي
                                 ؟
                             </h5>
                         {% else %}
                             {% csrf_token %}
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-6">
                                     <div class="form-group">
-                                        {{form.name|as_crispy_field}}
+                                        {{form.treasury_name|as_crispy_field}}
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-6">
                                     <div class="form-group">
-                                        {{form.image|as_crispy_field}}
+                                        {{form.treasury_balance|as_crispy_field}}
                                      </div>
                                 </div>
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        {{form.time|as_crispy_field}}
-                                    </div>
-                                </div>
                             </div>
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        {{form.weight|as_crispy_field}}
-                                    </div>
-                                </div>    
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        {{form.cost|as_crispy_field}}
-                                     </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        {{form.price|as_crispy_field}}
-                                    </div>
-                                </div>
-                            </div>
-                            <!--
-                            <div class="row">
-{#                                <div class="col-6">#}
-{#                                    <div class="form-group">#}
-{#                                        {{form.color|as_crispy_field}}#}
-{#                                     </div>#}
-{#                                </div>#}
-                            </div>-->
-
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        {{form.size|as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        {{form.category|as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        {{form.quantity|as_crispy_field}}
-                                    </div>
-                                </div>
-
-                            </div>
-                            
+                          
+                           
                             <input name="url" type="hidden" class="url_input">
                             <input name="instance" type="hidden"  value="{{ request.user.instance.id }}">
                         {% endif %}
@@ -166,11 +126,6 @@
 
         get_url();
     </script>
-
-   
-
- 
-
 
 {% endblock %} 
 
