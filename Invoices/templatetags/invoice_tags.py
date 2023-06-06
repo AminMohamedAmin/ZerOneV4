@@ -2,6 +2,7 @@ from django import template
 from django.db.models import Sum
 import pyqrcode
 import png
+from django.db.models import F
 
 register = template.Library()
 from Invoices.models import *
@@ -56,3 +57,9 @@ def qrcode(*args):
     image_as_str = code.png_as_base64_str(scale=5)
 
     return image_as_str
+
+
+@register.simple_tag(name='invoice_products_count')
+def invoice_products_count(inv_id):
+    products_count = InvoiceItem.objects.filter(invoice__id=inv_id).aggregate(sum=Sum(F('quantity') * F('unit'))).get('sum')
+    return int(products_count)

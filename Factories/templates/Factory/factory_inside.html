@@ -15,7 +15,7 @@
 
                                                 <tr>
 
-                                                    <th class="col-lg-2 col-xl-2 col-md-2" > {{form_inside.date|as_crispy_field}}</th>
+                                                    <th class="col-lg-2 col-xl-2 col-md-2">{{form_inside.date|as_crispy_field}}</th>
                                                     <th class="col-lg-2 col-xl-2 col-md-2">{{form_inside.weight|as_crispy_field}}</th>
                                                     <th class="col-lg-2 col-xl-2 col-md-2">{{form_inside.color|as_crispy_field}}</th>
                                                     <th class="col-lg-2 col-xl-2 col-md-2">{{form_inside.wool_type|as_crispy_field}}</th>
@@ -120,16 +120,16 @@
                                                     <tr style="text-align: center;">
                                                         <td>{{forloop.counter}}</td>
                                                         <td><span class="font-size-18"><i class="fas fa-calendar-alt"></i> {{w.date|date:'Y-m-d'}}</span></td>
-                                                        <td> {{w.weight}}</td>
+                                                        <td> {{w.weight|floatformat:3}}</td>
                                                         <td>{{w.color}}</td>
-                                                        <td>{{w.get_wool_type_display}}</td>
+                                                        <td>{% if w.wool_type %}{{w.get_wool_type_display}}{% endif %}</td>
                                                         <td> {{w.product}}</td>
-                                                        <td> {{w.product_weight}}</td>
+                                                        <td> {{w.product_weight|floatformat:1}}</td>
                                                         <td>{{w.product_count}}</td>
-                                                        <td> {{w.product_time}} </td>
-                                                        <td> {{w.hour_count}}</td>
-                                                        <td> {{w.hour_price}} </td>
-                                                        <td><i class="fas fa-dollar-sign"></i> {{w.total_account}} </td>
+                                                        <td> {{w.product_time|floatformat:1}} </td>
+                                                        <td> {{w.hour_count|floatformat:1}}</td>
+                                                        <td> {{w.hour_price|floatformat:2}} </td>
+                                                        <td><i class="fas fa-dollar-sign"></i> {{w.total_account|floatformat:2}} </td>
                                                         <td><i class="fas fa-user-tie"></i> {{w.admin}} </td>
                                                        {% if request.user.is_superuser %}
                                                        <td>
@@ -153,7 +153,7 @@
 
                                         <div style="margin-top:10px">
                                             <div class="row">
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-4">
                                                     <div class="card mini-stats-wid mb-0">
                                                         <div class="card-body bg-danger">
 
@@ -162,9 +162,9 @@
                                                                     <h5 class=" mb-2 text-light">اجمالي الوزن الخارج</h5>
                                                                     <h5 class="mb-0 text-dark">
                                                                         {% if sum_outside %}
-                                                                        {{sum_outside}}
+                                                                        {{sum_outside|floatformat:3}}
                                                                         {% else %}
-                                                                        0.0
+                                                                        0.000
                                                                         {% endif %}
                                                                         كيلو جرام
                                                                     </h5>
@@ -181,7 +181,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-4">
                                                     <div class="card mini-stats-wid mb-0">
                                                         <div class="card-body bg-danger">
 
@@ -190,9 +190,9 @@
                                                                     <h5 class=" mb-2 text-light">اجمالي الوزن المستلم</h5>
                                                                     <h5 class="mb-0 text-dark">
                                                                         {% if sum_weightt %}
-                                                                        {{sum_weightt}}
+                                                                        {{sum_weightt|floatformat:3}}
                                                                         {% else %}
-                                                                        0.0
+                                                                        0.000
                                                                         {% endif %}
                                                                         كيلو جرام</h5>
                                                                 </div>
@@ -208,7 +208,36 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-4">
+                                                    <div class="card mini-stats-wid mb-0">
+                                                        <div class="card-body bg-danger">
+
+                                                            <div class="d-flex flex-wrap">
+                                                                <div class="mr-3">
+                                                                    <h5 class=" mb-2 text-light">عدد الموديلات</h5>
+                                                                    <h5 class="mb-0 text-dark">
+                                                                        {% if models_count %}
+                                                                        {{models_count|floatformat:0}}
+                                                                        {% else %}
+                                                                        0
+                                                                        {% endif %}
+                                                                        موديل</h5>
+                                                                </div>
+
+
+                                                                <div class="avatar-xs ml-auto">
+                                                                    <div class="avatar-title bg-light rounded-circle text-dark font-size-20">
+                                                                        <i class="fas fa-list-ol"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-lg-4">
                                                     <div class="card mini-stats-wid mb-0">
                                                         <div class="card-body bg-danger">
 
@@ -217,7 +246,7 @@
                                                                     <h5 class=" mb-2 text-light">عدد القطع</h5>
                                                                     <h5 class="mb-0 text-dark">
                                                                         {% if products_count %}
-                                                                        {{products_count}}
+                                                                        {{products_count|floatformat:0}}
                                                                         {% else %}
                                                                         0
                                                                         {% endif %}
@@ -235,7 +264,34 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-4">
+                                                    <div class="card mini-stats-wid mb-0">
+                                                        <div class="card-body bg-danger">
+
+                                                            <div class="d-flex flex-wrap">
+                                                                <div class="mr-3">
+                                                                    <h5 class=" mb-2 text-light">عدد الساعات</h5>
+                                                                    <h5 class="mb-0 text-dark">
+                                                                        {% if hours_count %}
+                                                                        {{hours_count|floatformat:1}}
+                                                                        {% else %}
+                                                                        0.0
+                                                                        {% endif %}
+                                                                        ساعة</h5>
+                                                                </div>
+
+
+                                                                <div class="avatar-xs ml-auto">
+                                                                    <div class="avatar-title bg-light rounded-circle text-dark font-size-20">
+                                                                        <i class="fas fa-list-ol"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
                                                     <div class="card mini-stats-wid mb-0">
                                                         <div class="card-body bg-danger">
 
@@ -244,9 +300,9 @@
                                                                     <h5 class=" mb-2 text-light">اجمالي الحساب</h5>
                                                                     <h5 class="mb-0 text-dark">
                                                                         {% if sum_weightt_after %}
-                                                                        {{sum_weightt_after}}
+                                                                        {{sum_weightt_after|floatformat:2}}
                                                                         {% else %}
-                                                                        0.0
+                                                                        0.00
                                                                         {% endif %}
                                                                         جنية</h5>
                                                                 </div>
@@ -268,6 +324,9 @@
                                     <script src="/static/assets/libs/jquery/jquery.min.js"></script>
                                     <script>
                                         $(document).ready(function() {
+                                            $('#product').select2({
+                                                width: '100%'
+                                            });
                                             $('#in_specific_product').select2();
                                             $('#in_specific_wool').select2();
                                         });

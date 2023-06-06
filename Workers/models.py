@@ -29,6 +29,7 @@ HOUR_COUNT = (
     (2, "8"),
     (3, "12"),
     (4, "18"),
+    (5, "غياب"),
 )
 
 class WorkerAttendance(models.Model):

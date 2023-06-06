@@ -93,7 +93,7 @@
                                         <i class="fas fa-business-time"></i>
                                         الزمن:
                                     </span>
-                                    {{product.time}} دقيقة
+                                    {{product.time|floatformat:1}} دقيقة
                                 </div>
 
                                 <div class="col-lg-4">
@@ -101,7 +101,7 @@
                                         <i class="fas fa-weight"></i>
                                         الوزن:
                                     </span>
-                                    {{product.weight}} جرام
+                                    {{product.weight|floatformat:1}} جرام
                                 </div>
 
                                 <div class="col-lg-4">
@@ -109,7 +109,7 @@
                                         <i class="fas fa-dollar-sign"></i>
                                         التكلفة:
                                     </span>
-                                    {{product.cost}} جنية
+                                    {{product.cost|floatformat:2}} جنية
                                 </div>
 
                                 <div class="col-lg-4">
@@ -117,7 +117,7 @@
                                         <i class="fas fa-dollar-sign"></i>
                                         سعر البيع:
                                     </span>
-                                    {{product.price}} جنية
+                                    {{product.price|floatformat:2}} جنية
                                 </div>
 
                                 <div class="col-lg-4">
@@ -204,7 +204,7 @@
                                                                     {% if product.quantity %}
                                                                     {{ product.quantity|floatformat:0 }}
                                                                     {% else %}
-                                                                    0.0
+                                                                    0
                                                                     {% endif %}
                                                                     قطعة
                                                                 </th>
@@ -215,7 +215,7 @@
                                                                     {% if factory_in_sum %}
                                                                     {{ factory_in_sum|floatformat:0 }}
                                                                     {% else %}
-                                                                    0.0
+                                                                    0
                                                                     {% endif %}
                                                                     قطعة
                                                                 </th>
@@ -226,7 +226,7 @@
                                                                     {% if invoices_sum %}
                                                                     {{ invoices_sum|floatformat:0 }}
                                                                     {% else %}
-                                                                    0.0
+                                                                    0
                                                                     {% endif %}
                                                                     قطعة
                                                                 </th>
@@ -237,7 +237,7 @@
                                                                     {% if r_invoices_sum %}
                                                                     {{ r_invoices_sum|floatformat:0 }}
                                                                     {% else %}
-                                                                    0.0
+                                                                    0
                                                                     {% endif %}
                                                                     قطعة
                                                                 </th>
@@ -248,7 +248,7 @@
                                                                     {% if supplier_sum %}
                                                                     {{ supplier_sum|floatformat:0 }}
                                                                     {% else %}
-                                                                    0.0
+                                                                    0
                                                                     {% endif %}
                                                                     قطعة
                                                                 </th>
@@ -259,7 +259,7 @@
                                                                     {% if importer_sum %}
                                                                     {{ importer_sum|floatformat:0 }}
                                                                     {% else %}
-                                                                    0.0
+                                                                    0
                                                                     {% endif %}
                                                                     قطعة
                                                                 </th>
@@ -270,7 +270,7 @@
                                                                     {% if total %}
                                                                     {{ total|floatformat:0 }}
                                                                     {% else %}
-                                                                    0.0
+                                                                    0
                                                                     {% endif %}
                                                                     قطعة
                                                                 </th>

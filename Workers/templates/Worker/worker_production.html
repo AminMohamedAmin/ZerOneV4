@@ -81,7 +81,28 @@
                   }*/
                 </style>
 
-                <div class="card-body" id="production_worker">
+                <div class="table-responsive">
+                    <table class="table table-centered table-dark table-nowrap text-center">
+                        <thead>
+                            <tr>
+                                <td style="width: 60%" class="in_sell">
+                                    <select class="form-control" id="in_specific_product" style="width: 100%" onchange="InProductFilter(this)">
+                                        <option disabled selected value="">عرض كميات منتج معين؟</option>
+                                        <option value=" ">كل المنتجات</option>
+                                        {% for product in products %}
+                                        <option value="{{ product.id }}">{{ product.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td style="width: 40%">
+                                    <input type="date" class="form-control" id="in_specific_date" style="width: 100%" onchange="InDateFilter(this)">
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div id="production_worker">
                   <div class="table-responsive scroll">
                     <table
                       class="table table-centered table-dark table-nowrap text-center"
@@ -114,7 +135,7 @@
                                  {{x.day}}
                                 </td>
                                 <td>
-                                 {{x.quantity}}  
+                                 {{x.quantity|floatformat:0}}
                                 </td>
                                 <td>
                                 {% if x.product %}
@@ -124,10 +145,10 @@
                                 {% endif %}
                                 </td>
                                 <td>
-                                 {{x.price}}
+                                 {{x.price|floatformat:2}}
                                 </td>
                                 <td>
-                                 {{x.total}}
+                                 {{x.total|floatformat:2}}
                                 </td>
                                 <td>{{x.admin}}</td>
                                 {% if request.user.is_superuser %}
@@ -176,7 +197,7 @@
                                 <h3 class="mb-0 text-dark">
                                   
                                   {% if production_total %}
-                                  {{production_total}} قطعة
+                                  {{production_total|floatformat:0}} قطعة
                                   {% else %}
                                   0 قطعة
                                   {% endif %}
@@ -211,7 +232,7 @@
                                   {% if production_cost %}
                                     {{production_cost|floatformat:2}} جنية
                                   {% else %} 
-                                    0 جنية
+                                    0.00 جنية
                                   {% endif %}
   
                                 </h3>
@@ -234,6 +255,13 @@
                 </div>
                 <script src="/static/assets/libs/jquery/jquery.min.js"></script>
                 <script>
+                    $(document).ready(function() {
+                        $('#worker_production').select2({
+                            width: '100%'
+                        });
+                        $('#in_specific_product').select2();
+                    });
+
                     $( document ).ready(function() {
                         const weekday = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
                         const date = $('#production_date').val();
@@ -322,6 +350,36 @@
                       failure: function () {},
                     });
                   }
+                </script>
+                <script>
+                    function InProductFilter(val) {
+                        if (val.value && val.value!= ' '){
+                            $( '.in_sell' ).find('.select2-container').find('.select2-selection--single').css("background-color","lightgreen");
+                        }
+                        else {
+                            $( '.in_sell' ).find('.select2-container').find('.select2-selection--single').css("background-color","");
+                        }
+
+                        $( '#in_specific_date' ).css("background-color","");
+                        $( '#in_specific_date' ).val('');
+
+                        product_id = val.value;
+                        $( '#production_worker' ).html( '&nbsp;' ).load( "{% url 'Workers:WorkerProductions_div' object.id %}?product_id=" + product_id );
+                    };
+                    function InDateFilter(val) {
+                        if (val.value){
+                            val.style.backgroundColor = 'lightgreen';
+                        }
+                        else {
+                            val.style.backgroundColor = '';
+                        }
+
+                        $('#in_specific_product').select2('destroy');
+                        $('#in_specific_product').val('').select2();
+
+                        date_val = val.value;
+                        $( '#production_worker' ).html( '&nbsp;' ).load( "{% url 'Workers:WorkerProductions_div' object.id %}?date_val=" + date_val );
+                    };
                 </script>
               </div>
             </div>

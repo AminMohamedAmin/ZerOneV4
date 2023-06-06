@@ -161,7 +161,7 @@
                                     <div class="text-center">
                                         <h3 class="mb-3 text-truncate"><a href="{% url 'Products:ProductDetails' x.id %}" class="text-dark">{{x.name}}</a></h3>
                                         <ul class="list-inline mb-0">
-                                            <li class="list-inline-item mr-1"><h5 class="my-0"><span class="text-muted mr-1">السعر:</span> <b>${{x.price}}</b></h5></li>
+                                            <li class="list-inline-item mr-1"><h5 class="my-0"><span class="text-muted mr-1">السعر:</span> <b>${{x.price|floatformat:2}}</b></h5></li>
                                             <li class="list-inline-item mr-1"><h5 class="my-0"><span class="text-muted mr-1">الوزن:</span> <b>{{x.weight}} جرام</b></h5></li>
                                         </ul>
                                         
