@@ -21,14 +21,15 @@ OPERATION_TYPE = (
 )
 
 class TreasuryOperation(models.Model):
-    treasury = models.ForeignKey(Treasury, on_delete=models.CASCADE, verbose_name="الخزينة")
-    operation_type = models.IntegerField(choices=OPERATION_TYPE, verbose_name="نوع العملية")
-    operation_value = models.FloatField(default=0.0, verbose_name="رصيد الخزنة")
+    treasury = models.ForeignKey(Treasury, on_delete=models.CASCADE,null=True, blank=True, verbose_name="الخزينة")
+    operation_type = models.IntegerField(choices=OPERATION_TYPE, default=0, verbose_name="نوع العملية")
+    operation_value = models.FloatField(default=0.0, verbose_name="قيمة العملية")
     operation_description = models.TextField(max_length=200, null=True, blank=True, verbose_name = "وصف العملية")
     operation_notes =  models.TextField(max_length=200, null=True, blank=True, verbose_name = "ملاحظات علي العملية")
     operation_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,  verbose_name="انشاء بواسطة")
     operation_date = models.DateTimeField(auto_now_add=True, verbose_name="تاريخ العملية")
-    
+    deleted_operation = models.BooleanField(default=False)
+
     def __str__(self):
         return self.treasury.treasury_name
     

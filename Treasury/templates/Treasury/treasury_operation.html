@@ -1,0 +1,189 @@
+{% load crispy_forms_tags %}
+<div class="row">
+        <div class="col-lg-12">
+            <div class="card" >
+                <div class="card-body">
+                    <!-- الداخل المصنع -->
+                    <div class="tab-pane" id="treasury_operation" role="tabpanel">
+                        <div class="row">
+                            <div class="col-lg-12">
+
+                                    <div id="inside"  >
+                                        <div class="table-responsive scroll" >
+                                            <table class="table table-centered table-dark table-nowrap text-center">
+                                                <thead >
+                                                    <tr>
+                                                        <th>م</th>
+                                                        <th>التاريخ</th>
+                                                        <th>نوع العملية</th>
+                                                        <th>قيمة العملية</th>
+                                                        <th>وصف العملية</th>
+                                                        <th>المسئول</th>
+                                                        <th><i class="fas fa-cogs"></i></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody >
+                                                {% for w in treasury_operation_obj  %}
+                                                    <tr style="text-align: center;">
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td><span>{{w.operation_date | date:'Y-m-d'}}</span></td>
+                                                        <td>
+                                                            <span>
+                                                                {% if w.operation_type == 1 %}
+                                                                <i class='bx bx-chevrons-down' style="color: rgba(12, 186, 44, 0.827);"></i>
+                                                                {% else %}
+                                                                <i class='bx bx-chevrons-up' style="color: rgba(201, 12, 60, 0.827);"></i>
+                                                                {% endif %}
+                                                            "{{w.get_operation_type_display}}" 
+                                                            </span>
+                                                        </td>
+                                                        <td><span>{{w.operation_value}} جنية</span></td>
+                                                        <td>
+                                                            <span> 
+                                                                {% if w.operation_description %}
+                                                                    "{{w.operation_description}}"
+                                                                {% else %}
+                                                                    "---"
+                                                                {% endif %}
+                                                            </span>
+                                                        </td>
+                                                        <td><i class="fas fa-user-tie"></i> {{w.operation_user}} </td>
+                                                       {% if request.user.is_superuser %}
+                                                       <td>
+                                                     
+                                                        <a href="{% url 'Treasury:OperationSuperDelete' w.id %}" class="mr-3 text-warning"data-toggle="modal" data-target="#action_modal" data-original-title="Edit"><i class="mdi mdi-close font-size-18" style="cursor: pointer;"></i></a>
+                                                        <!-- <a onclick="
+                                                                var result = confirm('هل أنت متأكد من الحذف؟');
+                                                                if (result) {
+                                                                    InsideDelete('{{w.id}}')
+                                                                }
+                                                                " style="cursor: pointer;" class="text-danger" ><i class="mdi mdi-close font-size-18"></i></a> -->
+                                                        </td>
+                                                       {% endif %}
+
+
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        
+                                    </div>
+                                    <script src="/static/assets/libs/jquery/jquery.min.js"></script>
+                                    <script>
+                                        $(document).ready(function() {
+                                            $('#in_specific_product').select2();
+                                            $('#in_specific_wool').select2();
+                                        });
+
+                                        $(document).ready(function() {
+                                            $( '#product' ).on('change', function () {
+                                                e = this.value;
+                                                $.ajax({
+                                                    url: "{% url 'Factories:get_product_weight_time' %}?e=" + e,
+                                                    success: function (data) {
+                                                        $("#product_weight").val(data.prod_weight);
+                                                        $("#product_time").val(data.prod_time);
+                                                        weight = $('#weight_inside').val() * 1000;
+                                                        product_weight = data.prod_weight;
+                                                        product_count = (weight / product_weight);
+                                                        $('#product_count').val(parseInt(product_count));
+                                                        $('#product_count').change();
+                                                        $('#hour_price').change();
+                                                    }
+                                                });
+                                            });
+                                        });
+
+                                        function InSideCreate(){
+                                            if ($('#product_count').val() % 1 !== 0){
+                                                alert('عدد الموديل يجب أن يكون عدد صحيح')
+                                            }
+                                            else {
+                                                $.ajax({
+                                                    type : "POST",
+                                                    url : "{% url 'Factories:FactoryInSideCreate'  %}",
+                                                    data : {
+                                                        id : '{{object.id}}' ,
+                                                        date : $('#date_inside').val(),
+                                                        weight :$('#weight_inside').val(),
+                                                        color : $('#color_inside').val(),
+                                                        wool_type : $('#wool_type_inside').val(),
+                                                        product : $('#product').val(),
+                                                        product_weight : $('#product_weight').val(),
+                                                        product_time : $('#product_time').val(),
+                                                        product_count : parseInt($('#product_count').val()),
+                                                        hour_count : $('#hour_count').val(),
+                                                        hour_price : $('#hour_price').val(),
+                                                        total_account : $('#total_account').val(),
+                                                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                                                        dataType: "json",
+                                                    },
+                                                    success: function(response){
+                                                        /* response message */
+                                                        if(response.msg == 1){
+                                                            $('#weight_inside').val('');
+                                                            $('#color_inside').val('');
+                                                            $('#wool_type_inside').val('');
+                                                            $('#product').val('');
+                                                            $('#product_weight').val('');
+                                                            $('#product_time').val('');
+                                                            $('#product_count').val('');
+                                                            $('#hour_count').val('');
+                                                            //$('#hour_price').val('');
+                                                            $('#total_account').val('');
+                                                            $( '#inside' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryInSide_div' object.id %}");
+                                                            alert("تم الاضافة بنجاح");
+                                                            $('#outside').html('&nbsp;').load("{% url 'Factories:FactoryOutSide_div' object.id %}");
+                                                            $("#paymnet").html("&nbsp;").load("{% url 'Factories:FactoryPayment_div' object.id %}");
+                                                        }else{
+                                                            alert("حاول مرة اخري / خطأ في البيانات");
+                                                        }
+
+                                                     },
+
+                                                     failure: function() {
+
+                                                     }
+                                                });
+                                            }
+
+                                        };
+
+                                        function InsideDelete(inside_id){
+                                            $.ajax({
+                                                type : "POST",
+                                                url : "{% url 'Factories:FactoryInsideDelete' %}",
+                                                data :{
+                                                    inside_id : inside_id ,
+                                                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                                                    dataType: "json",
+                                                },
+                                                success: function(response){
+                                                    /* response message */
+                                                    $( '#inside' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryInSide_div' object.id %}");
+                                                    alert("تم الحذف بنجاح");
+                                                    $('#outside').html('&nbsp;').load("{% url 'Factories:FactoryOutSide_div' object.id %}");
+                                                    $("#paymnet").html("&nbsp;").load("{% url 'Factories:FactoryPayment_div' object.id %}");
+                                                 },
+
+                                                failure: function() {
+                                                alert("خطأ  في الاضافة ");
+                                                 }
+                                            });
+                                        }
+
+                                    </script>
+                                    
+                            </div>
+                        </div>
+
+                 </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+  

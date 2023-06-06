@@ -18,5 +18,23 @@ class TreasuryDeleteForm(forms.ModelForm):
         widgets = {
             'deleted' : forms.HiddenInput()
         }        
+
+
+class TreasuryOperationForm(forms.ModelForm):
+    class Meta:
+        fields = [ 'operation_value', 'operation_description' ]
+        model = TreasuryOperation
+        widgets = {
+            'operation_value' : forms.NumberInput(attrs={'class':'form-control', 'min':0, 'name':'op_value'}),        
+            'operation_description' : forms.TextInput(attrs={'class':'form-control', 'placeholder':'تفاصيل العملية......', 'name':'description'}),        
+        }   
         
-        
+
+class TreasuryOperationDeleteForm(forms.ModelForm):
+    class Meta:
+        fields = ['deleted_operation']
+        model = TreasuryOperation
+        widgets = {
+            'deleted_operation' : forms.HiddenInput()
+        }        
+
