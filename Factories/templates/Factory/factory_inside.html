@@ -62,16 +62,20 @@
                                         <table class="table table-centered table-dark table-nowrap text-center">
                                             <thead>
                                                 <tr>
-                                                    <td style="width: 35%" class="in_sel">
-                                                        <select class="form-control" id="in_specific_product" style="width: 100%" onchange="InProductFilter(this)">
-                                                            <option disabled selected value="">عرض كميات منتج معين؟</option>
-                                                            <option value=" ">كل المنتجات</option>
-                                                            {% for product in products %}
-                                                            <option value="{{ product.id }}">{{ product.name }}</option>
-                                                            {% endfor %}
-                                                        </select>
+                                                    <td style="width: 35%">
+                                                        <div  class="in_sel">
+                                                            <select class="form-control" id="in_specific_product" style="width: 100%" onchange="InProductFilter(this)">
+                                                                <option disabled selected value="">عرض كميات منتج معين؟</option>
+                                                                <option value=" ">كل المنتجات</option>
+                                                                {% for product in products %}
+                                                                <option value="{{ product.id }}">{{ product.name }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
                                                     </td>
-                                                    <td style="width: 35%" class="in_sell">
+                                                    
+                                                   <td style="width: 35%">
+                                                    <div  class="in_sell">
                                                         <select class="form-control" id="in_specific_wool" style="width: 100%" onchange="InWoolFilter(this)">
                                                             <option disabled selected value="">عرض كميات خامة معينة؟</option>
                                                             <option value=" ">كل الخامات</option>
@@ -85,7 +89,8 @@
                                                             <option value="8">بلستر</option>
                                                             <option value="9">استك</option>
                                                         </select>
-                                                    </td>
+                                                    </div>
+                                                   </td>
                                                     <td style="width: 30%">
                                                         <input type="date" class="form-control" id="in_specific_date" style="width: 100%" onchange="InDateFilter(this)">
                                                     </td>

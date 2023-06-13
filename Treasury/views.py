@@ -190,6 +190,30 @@ class TreasuryDetails(LoginRequiredMixin, DetailView):
         return context
 
 
+class TreasuryOperationDiv(LoginRequiredMixin, DetailView):
+    login_url = '/auth/login/'
+    model = Treasury
+    template_name = 'Treasury/treasury_operation_div.html'
+  
+
+    def get_context_data(self, **kwargs):
+        query_set = TreasuryOperation.objects.filter(treasury=self.object).order_by('-operation_date')
+        date_value = self.request.GET.get('date_val')
+        operation_type_value = self.request.GET.get('operation_type_value')
+        
+        if date_value:
+            query_set = query_set.filter(operation_date=date_value)
+
+        if operation_type_value:
+            query_set = query_set.filter(operation_type=operation_type_value)
+            
+        context = super().get_context_data(**kwargs)
+        context['type'] = 'list'
+        context['treasury'] = self.object
+        context['form'] = TreasuryOperationForm
+        context['treasury_operation_obj'] = query_set
+        return context
+
 
 class OperationInCreate(LoginRequiredMixin, CreateView):
     login_url = '/auth/login/'
