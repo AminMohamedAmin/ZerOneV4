@@ -1232,7 +1232,6 @@
                                                     <span style="margin-right: 10px;" class="font-weight-bold">بحث عن عامل ...</span>
                                                     <form class="app-search d-none d-lg-block" method="get" action="{% url 'Core:WorkerSearch' %}">
                                                         <div class="position-relative" >
-                                                            
                                                             <input type="text" value="{{worker_serach}}" list="work" autocomplete="off" class="form-control" name="worker" placeholder="بحث ... بإسم العامل">
                                                             <span >
                                                                 <button class="bx bx-search-alt btn btn-light" type="submit">
@@ -1316,6 +1315,32 @@
                                                     </form>
 
                                                 </div>
+                                                {% endif %}
+
+                                                {% if modules.treasury_active %}
+                                                <div class="col-lg-6">
+                                                    <span style="margin-right: 10px;" class="font-weight-bold">بحث عن خزينة ...</span>
+                                                    <form class="app-search d-none d-lg-block" method="get" action="{% url 'Core:TreasurySearch' %}">
+                                                        <div class="position-relative">
+                                
+                                                            <input type="text" value="{{treasury_serach_val}}"
+                                                                list="tre_list" autocomplete="off" class="form-control" name="treasury"
+                                                                placeholder="بحث ... بإسم الخزينة">
+                                                                <span >
+                                                                    <button class="bx bx-search-alt btn btn-light" type="submit">
+                                                                    </button>
+                                                                </span>
+                                                            <datalist id="tre_list">
+                                                                {% for w in treasurys %}
+                                                                <option value="{{ w.treasury_name }}">
+                                                                    {{ w.treasury_name }}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </datalist>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                
                                                 {% endif %}
 
                                             </div>

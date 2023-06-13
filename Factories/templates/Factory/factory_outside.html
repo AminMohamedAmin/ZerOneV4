@@ -312,9 +312,15 @@
                                     $( '#out_specific_date' ).css("background-color","");
                                     $( '#out_specific_date' ).val('');
 
+
+                                    $('#out_specific_product').select2('destroy');
+                                    $('#out_specific_product').val('').select2();
+
+
                                     wool_val = val.value;
                                     $( '#outside' ).html( '&nbsp;' ).load( "{% url 'Factories:FactoryOutSide_div' object.id %}?wool_val=" + wool_val );
                                 };
+                                
                                 function OutDateFilter(val) {
                                     if (val.value){
                                         val.style.backgroundColor = 'lightgreen';

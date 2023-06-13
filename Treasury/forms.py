@@ -22,9 +22,10 @@ class TreasuryDeleteForm(forms.ModelForm):
 
 class TreasuryOperationForm(forms.ModelForm):
     class Meta:
-        fields = [ 'operation_value', 'operation_description' ]
+        fields = [ 'operation_value', 'operation_description', 'operation_date' ]
         model = TreasuryOperation
         widgets = {
+            'operation_date' : forms.DateInput(attrs={'class': 'form-control', 'id': 'date', 'type':'date'}),
             'operation_value' : forms.NumberInput(attrs={'class':'form-control', 'min':0, 'name':'op_value'}),        
             'operation_description' : forms.TextInput(attrs={'class':'form-control', 'placeholder':'تفاصيل العملية......', 'name':'description'}),        
         }   

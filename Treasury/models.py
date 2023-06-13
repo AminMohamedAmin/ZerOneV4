@@ -2,6 +2,7 @@ from django.db.models.signals import post_save
 from django.db import models
 from django.dispatch import receiver
 from Auth.models import User
+from datetime import date
 
 
 class Treasury(models.Model):
@@ -27,7 +28,7 @@ class TreasuryOperation(models.Model):
     operation_description = models.TextField(max_length=200, null=True, blank=True, verbose_name = "وصف العملية")
     operation_notes =  models.TextField(max_length=200, null=True, blank=True, verbose_name = "ملاحظات علي العملية")
     operation_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,  verbose_name="انشاء بواسطة")
-    operation_date = models.DateTimeField(auto_now_add=True, verbose_name="تاريخ العملية")
+    operation_date = models.DateField(default=date.today, verbose_name="تاريخ العملية")
     deleted_operation = models.BooleanField(default=False)
 
     def __str__(self):

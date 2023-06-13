@@ -8,6 +8,7 @@ urlpatterns = [
     path('create/', TreasuryCreate.as_view(), name="TreasuryCreate"),
     path('update/<int:pk>/', TreasuryUpdate.as_view(), name="TreasuryUpdate"),
     path('details/<int:pk>/', TreasuryDetails.as_view(), name="TreasuryDetails"),
+    path('details_div/<int:pk>/', TreasuryOperationDiv.as_view(), name="TreasuryOperationDiv"),
     path('delete/<int:pk>', TreasuryDelete.as_view(), name="TreasuryDelete"),
     path('restore/<int:pk>', TreasuryRestore.as_view(), name="TreasuryRestore"),
     path('superDelete/<int:pk>', TreasurySuperDelete.as_view(), name="TreasurySuperDelete"),

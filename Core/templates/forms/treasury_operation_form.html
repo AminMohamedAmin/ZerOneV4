@@ -47,12 +47,17 @@
                         {% else %}
                             {% csrf_token %}
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        {{form.operation_date|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-4">
                                     <div class="form-group">
                                         {{form.operation_value|as_crispy_field}}
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
                                     <div class="form-group">
                                         {{form.operation_description|as_crispy_field}}
                                      </div>
