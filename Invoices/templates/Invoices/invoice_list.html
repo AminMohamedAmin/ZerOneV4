@@ -218,9 +218,9 @@
                                             <li class="list-inline-item mr-3">
                                                 <h5 class="font-size-14" data-toggle="tooltip" data-placement="top" title="" data-original-title="Amount"><i class="bx bx-money mr-1 text-primary"></i> $
                                                     {% if products_val%}
-                                                    {{ products_val }}
+                                                    {{ products_val|floatformat:2 }}
                                                     {% else %}
-                                                    0.0
+                                                    0.00
                                                     {% endif %}
                                                 </h5>
                                             </li>

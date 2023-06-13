@@ -192,7 +192,7 @@ table.dataTable thead .sorting_desc_disabled {
                                                                             {{x.date|date:'Y-m-d'}}
                                                                         </td>
                                                                         <td>
-                                                                            {{x.value}}
+                                                                            {{x.value|floatformat:2}}
                                                                         </td>
                                                                         <td>
                                                                             {{x.reason}}
@@ -322,7 +322,7 @@ $(document).ready(function () {
                         return intVal(a) + intVal(b);
                     }, 0);
 
-                $(api.column(1).footer()).html('' + pageTotal + ' ( من ' + total + ' )');
+                $(api.column(1).footer()).html('' + pageTotal.toFixed(2) + ' ( من ' + total.toFixed(2) + ' )');
             },
 
             "columnDefs": [ {
@@ -337,7 +337,7 @@ $(document).ready(function () {
                     extend: 'print',
                     text: 'طباعة الجدول',
                     exportOptions: {
-                        columns: [ 0, 1 ],
+                        columns: [ 0, 2, 1 ],
                         modifier: {
                             page: 'current'
                         }

@@ -90,6 +90,7 @@ class ProductSellerForm(forms.ModelForm):
             'nation_no': forms.TextInput(attrs={'class':'form-control'}),
             'initial_balance_debit': forms.NumberInput(attrs={'class':'form-control', 'min':0}),
             'initial_balance_type': forms.Select(attrs={'class':'form-control'}),
+            'agreement': forms.TextInput(attrs={'class':'form-control'}),
         }
 
 
@@ -102,6 +103,7 @@ class ProductSellerFormUpdate(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class':'form-control'}),
             'address': forms.TextInput(attrs={'class':'form-control'}),
             'nation_no': forms.TextInput(attrs={'class':'form-control'}),
+            'agreement': forms.TextInput(attrs={'class':'form-control'}),
         }
 
 
@@ -110,7 +112,7 @@ class ProductSellerDeleteForm(forms.ModelForm):
         fields = ['deleted']
         model = Product
         widgets = {
-            'deleted' : forms.HiddenInput()
+            'deleted': forms.HiddenInput()
         }
 
 

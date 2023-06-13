@@ -134,7 +134,7 @@
                                     <p class="text-muted "> نوع المكينة : <span class="badge badge-warning">{{x.machine_type}}</span>
                                     </p>
                                     {% else %}
-                                    <p class="text-muted "> نوع المكينة : لم تضاف بعد</span>
+                                    <p class="text-muted "> نوع المكينة : -</span>
                                     </p>
                                     {% endif %}
                                 </div>
@@ -144,7 +144,7 @@
                                     <p class="text-muted "> عدد المكينات : <span class="badge badge-primary">{{x.machine_count}}</span>
                                     </p>
                                     {% else %}
-                                    <p class="text-muted "> عدد المكينات  : لم تضاف بعد</span>
+                                    <p class="text-muted "> عدد المكينات : -</span>
                                     </p>
                                     {% endif %}
                                 </div>
@@ -169,7 +169,7 @@
                                     <li class="list-inline-item " data-toggle="tooltip" data-placement="top" title="" data-original-title="Comments">
                                         
                                         {% if x.hour_price %}
-                                        <i class='bx bxs-dollar-circle'></i> {{x.hour_price}}
+                                        <i class='bx bxs-dollar-circle'></i> {{x.hour_price|floatformat:2}}
                                             
                                         {% endif %}
                                             

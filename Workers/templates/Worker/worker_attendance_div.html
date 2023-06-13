@@ -2,7 +2,7 @@
   <table
     class="table table-centered table-dark table-nowrap text-center"
   >
-    <thead style="background-color: #0c2b4b">
+    <thead>
       <tr>
         <th>م</th>
         <th>التاريخ</th>
@@ -27,7 +27,10 @@
                {{x.day}}
               </td>
               <td>
-               {{x.get_hour_count_display}} ساعة 
+               {{x.get_hour_count_display}}
+                  {% if x.hour_count != 5 %}
+                    ساعة
+                  {% endif %}
               </td>
               <td><i class="fas fa-user-tie"></i> {{x.admin}}</td>
               {% if request.user.is_superuser %}
@@ -64,8 +67,7 @@
 
 <div style="margin-top: 10px">
   <div class="row">
-   
-    <div class="col-lg-4 flex-center">
+    <div class="col-lg-3 flex-center">
       <div class="card mini-stats-wid mb-0">
         <div class="card-body bg-danger">
           <div class="d-flex flex-wrap">
@@ -73,9 +75,9 @@
               <h5 class="mb-2 text-light">
                 اجمالي الايام
               </h5>
-              <h3 class="mb-0 text-dark">
+              <h4 class="mb-0 text-dark">
                 {{attendance_summary.count_days}} يوم
-              </h3>
+              </h4>
             </div>
 
             <div class="avatar-sm ml-auto">
@@ -90,44 +92,69 @@
       </div>
     </div>
 
-    <div class="col-lg-4 flex-center">
-                        <div class="card mini-stats-wid mb-0">
-                          <div class="card-body bg-danger">
-                            <div class="d-flex flex-wrap">
-                              <div class="">
-                                <h5 class="mb-2 text-light">
-                                  الحضور الفعلي
-                                </h5>
-                                <h3 class="mb-0 text-dark">
-                                    {{attendance_real_summary.real_days}} يوم
-                                    و
-                                  {{attendance_real_summary.rest_hours}} ساعة
-                                </h3>
-                              </div>
+    <div class="col-lg-3 flex-center">
+        <div class="card mini-stats-wid mb-0">
+          <div class="card-body bg-danger">
+            <div class="d-flex flex-wrap">
+              <div class="">
+                <h5 class="mb-2 text-light">
+                  الغياب
+                </h5>
+                <h4 class="mb-0 text-dark">
+                    {{absence_summary.count_days}} يوم
+                </h4>
+              </div>
 
-                              <div class="avatar-sm ml-auto">
-                                <div
-                                  class="avatar-title bg-light rounded-circle text-dark font-size-20"
-                                >
-                                <i class="fas fa-clock"></i>
-                                 </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+              <div class="avatar-sm ml-auto">
+                <div
+                  class="avatar-title bg-light rounded-circle text-dark font-size-20"
+                >
+                <i class="fas fa-clock"></i>
+                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <div class="col-lg-4 flex-center">
+    <div class="col-lg-3 flex-center">
+        <div class="card mini-stats-wid mb-0">
+          <div class="card-body bg-danger">
+            <div class="d-flex flex-wrap">
+              <div class="">
+                <h5 class="mb-2 text-light">
+                  الحضور الفعلي
+                </h5>
+                <h4 class="mb-0 text-dark">
+                    {{attendance_real_summary.real_days}} يوم
+                    و
+                  {{attendance_real_summary.rest_hours}} ساعة
+                </h4>
+              </div>
+
+              <div class="avatar-sm ml-auto">
+                <div
+                  class="avatar-title bg-light rounded-circle text-dark font-size-20"
+                >
+                <i class="fas fa-clock"></i>
+                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="col-lg-3 flex-center">
       <div class="card mini-stats-wid mb-0">
         <div class="card-body bg-danger">
           <div class="d-flex flex-wrap">
             <div class="">
               <h5 class="mb-2 text-light">
-                اجمالي الحساب المستحق
+                اجمالي الحساب
               </h5>
-              <h3 class="mb-0 text-dark">
+              <h4 class="mb-0 text-dark">
                 {{attendance_all_cost.sum_price|floatformat:2}} جنية
-              </h3>
+              </h4>
             </div>
 
             <div class="avatar-sm ml-auto">
@@ -141,7 +168,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
 </div>

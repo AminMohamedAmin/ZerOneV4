@@ -10,66 +10,72 @@
   <body>
     <h1 style="margin-top: -100px">
       {% if system_info.logo %}
-       <img src={{system_info.logo.url}} width="150px" height="150px">
+       <img src={{system_info.logo.url}} height="100px" width="100px">
        {% else %}
-       <img src="/static/assets/images/new.png" width="150px" height="150px">
+       <img src="/static/assets/images/new.png" height="100px" width="100px">
       {% endif %}
     </h1>
 
     <dl id="informations" style="margin-top: -100px">
         <h2 class="text-center">{{system_info.name}}</h2>
-        <h5><span> {{date|date:'Y-m-d'}} </span>تاريخ التقرير: </h5>
-        <h5><span> {{supplier.name}} </span>كشف حساب
+        <h5 style="margin-top: -15px"><span> {{date|date:'Y-m-d'}} </span>تاريخ التقرير: </h5>
+        <h5 style="margin-top: -15px"><span> {{supplier.name}} </span>كشف حساب
             {% if supplier.type == 1 %}
             المورد:
             {% else %}
             المستورد:
             {% endif %}
             </h5>
-    </dl>
+    </dl><hr>
 
-    <table style="margin-top: 100px">
+    <table>
         <tr>
             <th>
-            {{ count }}
+            {{ count|floatformat:0 }}
+            قطعة
             </th>
             <th>اجمالي عدد القطع</th>
         </tr>
         <tr>
             <th>
             {{ account|floatformat:2 }}
+            جنيه
             </th>
             <th>اجمالي الحساب</th>
         </tr>
         <tr>
-            <th>{{ total|floatformat:2 }}</th>
+            <th>
+                {{ total|floatformat:2 }}
+                جنيه
+            </th>
             <th>اجمالي المسحوبات</th>
         </tr>
         <tr>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr>
             <th>
+            {% if account|sub:total > 0 %}
+                {{ account|sub:total|floatformat:2 }}
+            {% elif account|sub:total < 0  %}
+                {{ account|sub:total|mul:-1|floatformat:2 }}
+            {% else %}
+                0.00
+            {% endif %}
+            جنيه
+            </th>
+            <th>الباقي
             {% if account|sub:total > 0 %}
                 {% if supplier.type == 1 %}
                     للمورد
                 {% else %}
                     علي المستورد
                 {% endif %}
-                {{ account|sub:total|floatformat:2 }}
             {% elif account|sub:total < 0  %}
                 {% if supplier.type == 1 %}
                     علي المورد
                 {% else %}
                     للمستورد
                 {% endif %}
-                {{ account|sub:total|mul:-1|floatformat:2 }}
-            {% else %}
-                0.0
             {% endif %}
             </th>
-            <th>الباقي</th>
         </tr>
     </table>
   </body>
